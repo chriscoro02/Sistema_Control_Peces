@@ -1,0 +1,369 @@
+:root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-teal: #0d9488;
+            --light-blue: #e0f2fe;
+            --gradient-start: #0ea5e9;
+            --gradient-end: #0284c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--primary-blue) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .ocean-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23ffffff'/%3E%3C/svg%3E") repeat-x;
+            animation: wave 15s linear infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation-duration: 20s;
+            animation-direction: reverse;
+            opacity: 0.5;
+        }
+
+        .wave:nth-child(3) {
+            animation-duration: 25s;
+            opacity: 0.3;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 
+                0 32px 64px rgba(0, 0, 0, 0.12),
+                0 16px 32px rgba(0, 0, 0, 0.08),
+                0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 480px;
+            margin: 20px;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .login-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 40px 80px rgba(0, 0, 0, 0.15),
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E") repeat;
+        }
+
+        .logo-container {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .fish-logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .company-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .company-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-section {
+            padding: 3rem;
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-text h3 {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            background-color: white;
+        }
+
+        .form-floating > label {
+            padding-left: 3rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            z-index: 10;
+            font-size: 1.1rem;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            color: #6b7280;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1.1rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            background-color: #f3f4f6;
+            color: var(--primary-blue);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .demo-credentials {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .demo-credentials h6 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .credential-item:last-child {
+            border-bottom: none;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #92400e;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+
+        .footer-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-info small {
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 576px) {
+            .login-container {
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            .header-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .form-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .company-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        .loading {
+            display: none;
+        }
+
+        .loading.show {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
