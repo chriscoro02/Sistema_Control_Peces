@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Lotes - Sistema Piscícola</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            border-bottom-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            min-height: 700px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .form-container {
+            max-width: 900px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid #28a745;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .lote-card {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .lote-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .lote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .lote-codigo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .lote-estado {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .estado-activo {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .estado-cosechado {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .estado-vendido {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .lote-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .lote-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-harvest {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input,
+        .search-filter select {
+            padding: 10px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .fase-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .fase-alevinaje {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .fase-juvenil {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .fase-preengorde {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .fase-engorde {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .timeline {
+            margin-top: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #28a745;
+            margin-right: 15px;
+            margin-top: 6px;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .timeline-text {
+            color: #333;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+
+            .lote-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            🏷️ Gestión de Lotes
+        </h1>
+    </div>
+
+    <div class="container">
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Lotes activos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15,420</div>
+                <div class="stat-label">Total de peces</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Listos para cosecha</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">Supervivencia promedio</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="showTab(event, 'nuevo-lote')">Nuevo Lote</div>
+            <div class="tab" onclick="showTab(event, 'lotes-activos')">Lotes Activos</div>
+            <div class="tab" onclick="showTab(event, 'seguimiento')">Seguimiento</div>
+            <div class="tab" onclick="showTab(event, 'historial')">Historial</div>
+        </div>
+
+        <div class="tab-content">
+            <!-- Nuevo Lote -->
+            <div class="tab-pane active" id="nuevo-lote">
+                <h3 style="margin-bottom: 25px; color: #333;">Crear Nuevo Lote</h3>
+                
+                <div class="form-container">
+                    <form id="nuevoLoteForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="codigo_lote">Código del Lote *</label>
+                                <input type="text" id="codigo_lote" name="codigo_lote" maxlength="30" required 
+                                       placeholder="Ej: L001, LOTE-2025-001">
+                                <small style="color: #666;">Código único identificador del lote</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="estanque">Estanque *</label>
+                                <select id="estanque" name="id_estanque" required onchange="mostrarInfoEstanque()">
+                                    <option value="">Seleccionar estanque</option>
+                                    <option value="1" data-tipo="tierra" data-capacidad="1000">E001 - Estanque Principal (Tierra - 1000 peces)</option>
+                                    <option value="2" data-tipo="concreto" data-capacidad="1500">E002 - Estanque Norte (Concreto - 1500 peces)</option>
+                                    <option value="3" data-tipo="jaula" data-capacidad="800">E003 - Jaula Flotante A (Jaula - 800 peces)</option>
+                                    <option value="4" data-tipo="tierra" data-capacidad="1200">E004 - Estanque Sur (Tierra - 1200 peces)</option>
+                                    <option value="5" data-tipo="tanque" data-capacidad="500">E005 - Tanque Circular (Tanque - 500 peces)</option>
+                                </select>
+                                <div id="info-estanque" style="margin-top: 8px; font-size: 12px; color: #666; display: none;"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="especie">Especie *</label>
+                                <select id="especie" name="id_especie" required onchange="mostrarInfoEspecie()">
+                                    <option value="">Seleccionar especie</option>
+                                    <option value="1" data-peso-min="0.3" data-peso-max="2.5">Tilapia - Oreochromis niloticus</option>
+                                    <option value="2" data-peso-min="0.5" data-peso-max="3.0">Carpa - Cyprinus carpio</option>
+                                    <option value="3" data-peso-min="0.2" data-peso-max="1.5">Trucha - Oncorhynchus mykiss</option>
+                                    <option value="4" data-peso-min="0.8" data-peso-max="5.0">Pacu - Piaractus mesopotamicus</option>
+                                    <option value="5" data-peso-min="1.0" data-peso-max="8.0">Sábalo - Prochilodus lineatus</option>
+                                </select>
+                                <div id="info-especie" style="margin-top: 8px; font-size: 12px; color: #666; display: none;"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="proveedor">Proveedor</label>
+                                <select id="proveedor" name="id_proveedor">
+                                    <option value="">Seleccionar proveedor (opcional)</option>
+                                    <option value="1">AquaCultivos Bolivia S.R.L.</option>
+                                    <option value="2">Piscifactoría Santa Cruz</option>
+                                    <option value="3">Alevinos del Oriente</option>
+                                    <option value="4">Criadero La Esperanza</option>
+                                    <option value="5">Producción propia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fecha_siembra">Fecha de Siembra *</label>
+                                <input type="date" id="fecha_siembra" name="fecha_siembra" required onchange="calcularFechas()">
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidad_inicial">Cantidad Inicial *</label>
+                                <input type="number" id="cantidad_inicial" name="cantidad_inicial" min="1" required 
+                                       placeholder="Número de alevinos" onchange="validarCapacidad()">
+                                <small style="color: #666;">Número de alevinos sembrados</small>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fecha_levante">Fecha Estimada de Levante</label>
+                                <input type="date" id="fecha_levante" name="fecha_levante" readonly>
+                                <small style="color: #666;">Calculada automáticamente (180 días aprox.)</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="origen">Origen</label>
+                                <input type="text" id="origen" name="origen" maxlength="80" 
+                                       placeholder="Ej: Laboratorio local, Importado, Reproducción propia">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="observaciones_lote">Observaciones</label>
+                            <textarea id="observaciones_lote" name="observaciones" rows="3" 
+                                      placeholder="Condiciones especiales, características del lote, etc."></textarea>
+                        </div>
+
+                        <div style="padding-top: 20px; border-top: 1px solid #e1e5e9;">
+                            <button type="submit" class="btn-primary">Crear Lote</button>
+                            <button type="reset" class="btn-secondary">Limpiar Formulario</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lotes Activos -->
+            <div class="tab-pane" id="lotes-activos">
+                <h3 style="margin-bottom: 25px; color: #333;">Lotes Activos</h3>
+                
+                <!-- Filtros -->
+                <div class="search-filter">
+                    <input type="text" placeholder="Buscar por código..." id="searchCodigo">
+                    <select id="filterEspecie">
+                        <option value="">Todas las especies</option>
+                        <option value="tilapia">Tilapia</option>
+                        <option value="carpa">Carpa</option>
+                        <option value="trucha">Trucha</option>
+                    </select>
+                    <select id="filterEstanque">
+                        <option value="">Todos los estanques</option>
+                        <option value="E001">E001 - Principal</option>
+                        <option value="E002">E002 - Norte</option>
+                        <option value="E003">E003 - Jaula A</option>
+                    </select>
+                    <button class="btn-primary" onclick="aplicarFiltros()">Filtrar</button>
+                </div>
+
+                <!-- Lotes Activos Cards -->
+                <div id="lotes-container">
+                    <div class="lote-card">
+                        <div class="lote-header">
+                            <span class="lote-codigo">L001-2025</span>
+                            <span class="lote-estado estado-activo">Activo</span>
+                        </div>
+                        <div class="lote-info">
+                            <div class="info-item">
+                                <div class="info-label">Especie</div>
+                                <div class="info-value">Tilapia</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Estanque</div>
+                                <div class="info-value">E001</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Cant. Inicial</div>
+                                <div class="info-value">500</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Días Cultivo</div>
+                                <div class="info-value">125</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Fase</div>
+                                <div class="info-value"><span class="fase-badge fase-engorde">Engorde</span></div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Supervivencia</div>
+                                <div class="info-value">92%</div>
+                            </div>
+                        </div>
+                        <div class="lote-actions">
+                            <button class="btn-sm btn-view" onclick="verDetalleLote('L001-2025')">Ver Detalle</button>
+                            <button class="btn-sm btn-edit" onclick="editarLote('L001-2025')">Editar</button>
+                            <button class="btn-sm btn-harvest" onclick="programarCosecha('L001-2025')">Cosechar</button>
+                        </div>
+                    </div>
+
+                    <div class="lote-card">
+                        <div class="lote-header">
+                            <span class="lote-codigo">L002-2025</span>
+                            <span class="lote-estado estado-activo">Activo</span>
+                        </div>
+                        <div class="lote-info">
+                            <div class="info-item">
+                                <div class="info-label">Especie</div>
+                                <div class="info-value">Carpa</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Estanque</div>
+                                <div class="info-value">E002</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Cant. Inicial</div>
+                                <div class="info-value">300</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Días Cultivo</div>
+                                <div class="info-value">89</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Fase</div>
+                                <div class="info-value"><span class="fase-badge fase-juvenil">Juvenil</span></div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Supervivencia</div>
+                                <div class="info-value">88%</div>
+                            </div>
+                        </div>
+                        <div class="lote-actions">
+                            <button class="btn-sm btn-view" onclick="verDetalleLote('L002-2025')">Ver Detalle</button>
+                            <button class="btn-sm btn-edit" onclick="editarLote('L002-2025')">Editar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seguimiento -->
+            <div class="tab-pane" id="seguimiento">
+                <h3 style="margin-bottom: 25px; color: #333;">Seguimiento Detallado</h3>
+                
+                <div class="form-group">
+                    <label for="lote_seguimiento">Seleccionar Lote para Seguimiento</label>
+                    <select id="lote_seguimiento" onchange="cargarSeguimiento()">
+                        <option value="">Seleccionar lote</option>
+                        <option value="L001-2025">L001-2025 - Tilapia - E001</option>
+                        <option value="L002-2025">L002-2025 - Carpa - E002</option>
+                        <option value="L003-2025">L003-2025 - Trucha - E003</option>
+                    </select>
+                </div>
+
+                <div id="detalle-seguimiento" style="display: none;">
+                    <div class="lote-card">
+                        <div class="lote-header">
+                            <span class="lote-codigo">L001-2025</span>
+                            <span class="lote-estado estado-activo">En Engorde</span>
+                        </div>
+                        
+                        <div class="timeline">
+                            <h4 style="margin-bottom: 20px;">Historial del Lote</h4>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">15 de Septiembre, 2025</div>
+                                    <div class="timeline-text">Muestreo: 460 peces, peso promedio 0.85 kg</div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">10 de Septiembre, 2025</div>
+                                    <div class="timeline-text">Tratamiento profiláctico aplicado</div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">1 de Agosto, 2025</div>
+                                    <div class="timeline-text">Traslado a fase de engorde - E001</div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">15 de Mayo, 2025</div>
+                                    <div class="timeline-text">Siembra inicial: 500 alevinos de tilapia</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historial -->
+            <div class="tab-pane" id="historial">
+                <h3 style="margin-bottom: 25px; color: #333;">Historial de Lotes</h3>
+                
+                <div class="search-filter">
+                    <input type="date" id="fecha_inicio" placeholder="Fecha inicio">
+                    <input type="date" id="fecha_fin" placeholder="Fecha fin">
+                    <select id="filter_estado">
+                        <option value="">Todos los estados</option>
+                        <option value="cosechado">Cosechado</option>
+                        <option value="vendido">Vendido</option>
+                        <option value="perdida">Pérdida Total</option>
+                    </select>
+                    <button class="btn-primary">Filtrar</button>
+                </div>
+
+                <div class="lote-card">
+                    <div class="lote-header">
+                        <span class="lote-codigo">L010-2024</span>
+                        <span class="lote-estado estado-cosechado">Cosechado</span>
+                    </div>
+                    <div class="lote-info">
+                        <div class="info-item">
+                            <div class="info-label">Especie</div>
+                            <div class="info-value">Tilapia</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Fecha Siembra</div>
+                            <div class="info-value">15/01/2024</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Fecha Cosecha</div>
+                            <div class="info-value">15/08/2024</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Cant. Cosechada</div>
+                            <div class="info-value">420 peces</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Supervivencia</div>
+                            <div class="info-value">84%</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Peso Total</div>
+                            <div class="info-value">357 kg</div>
+                        </div>
+                    </div>
+                    <div class="lote-actions">
+                        <button class="btn-sm btn-view" onclick="verInformeLote('L010-2024')">Ver Informe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Establecer fecha actual
+            const now = new Date();
+            document.getElementById('fecha_siembra').value = now.toISOString().split('T')[0];
+            calcularFechas();
+        });
+
+        // Función para cambiar de pestaña
+        function showTab(evt, tabName) {
+            var i, tabcontent, tabs;
+            
+            tabcontent = document.getElementsByClassName("tab-pane");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function goBack() {
+            window.location.href = 'dashboard.html';
+        }
+
+        // Funciones auxiliares del formulario
+        function mostrarInfoEstanque() {
+            const select = document.getElementById('estanque');
+            const infoDiv = document.getElementById('info-estanque');
+            const selectedOption = select.selectedOptions[0];
+            
+            if (selectedOption && selectedOption.value) {
+                const tipo = selectedOption.getAttribute('data-tipo');
+                const capacidad = selectedOption.getAttribute('data-capacidad');
+                infoDiv.innerHTML = `Tipo: ${tipo} | Capacidad máxima: ${capacidad} peces`;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        function mostrarInfoEspecie() {
+            const select = document.getElementById('especie');
+            const infoDiv = document.getElementById('info-especie');
+            const selectedOption = select.selectedOptions[0];
+            
+            if (selectedOption && selectedOption.value) {
+                const pesoMin = selectedOption.getAttribute('data-peso-min');
+                const pesoMax = selectedOption.getAttribute('data-peso-max');
+                infoDiv.innerHTML = `Peso comercial: ${pesoMin} - ${pesoMax} kg`;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        function calcularFechas() {
+            const fechaSiembra = document.getElementById('fecha_siembra').value;
+            if (fechaSiembra) {
+                const fecha = new Date(fechaSiembra);
+                fecha.setDate(fecha.getDate() + 180); // 180 días aproximados
+                document.getElementById('fecha_levante').value = fecha.toISOString().split('T')[0];
+            }
+        }
+
+        function validarCapacidad() {
+            const cantidadInput = document.getElementById('cantidad_inicial');
+            const estanqueSelect = document.getElementById('estanque');
+            const selectedOption = estanqueSelect.selectedOptions[0];
+            
+            if (selectedOption && selectedOption.value) {
+                const capacidadMaxima = parseInt(selectedOption.getAttribute('data-capacidad'));
+                const cantidadIngresada = parseInt(cantidadInput.value);
+                
+                if (cantidadIngresada > capacidadMaxima) {
+                    alert(`Advertencia: La cantidad ingresada (${cantidadIngresada}) excede la capacidad máxima del estanque (${capacidadMaxima} peces).`);
+                    cantidadInput.style.borderColor = '#dc3545';
+                } else {
+                    cantidadInput.style.borderColor = '#28a745';
+                }
+            }
+        }
+
+        // Funciones para lotes activos
+        function aplicarFiltros() {
+            const codigo = document.getElementById('searchCodigo').value.toLowerCase();
+            const especie = document.getElementById('filterEspecie').value.toLowerCase();
+            const estanque = document.getElementById('filterEstanque').value;
+            
+            const lotes = document.querySelectorAll('.lote-card');
+            
+            lotes.forEach(lote => {
+                const codigoLote = lote.querySelector('.lote-codigo').textContent.toLowerCase();
+                const especieLote = lote.querySelector('.info-value').textContent.toLowerCase();
+                const estanqueLote = lote.querySelectorAll('.info-value')[1].textContent;
+                
+                let mostrar = true;
+                
+                if (codigo && !codigoLote.includes(codigo)) {
+                    mostrar = false;
+                }
+                
+                if (especie && !especieLote.includes(especie)) {
+                    mostrar = false;
+                }
+                
+                if (estanque && !estanqueLote.includes(estanque)) {
+                    mostrar = false;
+                }
+                
+                lote.style.display = mostrar ? 'block' : 'none';
+            });
+        }
+
+        function verDetalleLote(codigo) {
+            alert(`Mostrando detalle completo del lote: ${codigo}`);
+            // Aquí se implementaría la navegación a una página de detalle
+        }
+
+        function editarLote(codigo) {
+            alert(`Editando lote: ${codigo}`);
+            // Aquí se cargarían los datos en el formulario de edición
+        }
+
+        function programarCosecha(codigo) {
+            if (confirm(`¿Está seguro de que desea programar la cosecha del lote ${codigo}?`)) {
+                alert(`Cosecha programada para el lote: ${codigo}`);
+                // Aquí se navegaría al módulo de cosecha con el lote preseleccionado
+            }
+        }
+
+        function cargarSeguimiento() {
+            const loteSelect = document.getElementById('lote_seguimiento');
+            const detalleDiv = document.getElementById('detalle-seguimiento');
+            
+            if (loteSelect.value) {
+                detalleDiv.style.display = 'block';
+            } else {
+                detalleDiv.style.display = 'none';
+            }
+        }
+
+        function verInformeLote(codigo) {
+            alert(`Generando informe completo del lote: ${codigo}`);
+        }
+
+        // Manejo del formulario
+        document.getElementById('nuevoLoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const loteData = Object.fromEntries(formData);
+            
+            // Validaciones
+            if (!loteData.codigo_lote || !loteData.id_estanque || !loteData.id_especie || !loteData.fecha_siembra || !loteData.cantidad_inicial) {
+                alert('Por favor complete todos los campos obligatorios.');
+                return;
+            }
+            
+            if (parseInt(loteData.cantidad_inicial) < 1) {
+                alert('La cantidad inicial debe ser mayor a 0.');
+                return;
+            }
+            
+            // Simular guardado exitoso
+            alert('Lote creado exitosamente!');
+            this.reset();
+            
+            // Restablecer fecha actual
+            const now = new Date();
+            document.getElementById('fecha_siembra').value = now.toISOString().split('T')[0];
+            calcularFechas();
+            
+            // Opcional: cambiar a la pestaña de lotes activos
+            // showTab({currentTarget: document.querySelector('.tab:nth-child(2)')}, 'lotes-activos');
+        });
+
+        // Auto-generar código de lote
+        document.getElementById('fecha_siembra').addEventListener('change', function() {
+            const codigoInput = document.getElementById('codigo_lote');
+            if (!codigoInput.value) {
+                const fecha = new Date(this.value);
+                const año = fecha.getFullYear();
+                const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                const dia = String(fecha.getDate()).padStart(2, '0');
+                
+                // Generar código automático basado en la fecha
+                const codigoSugerido = `L${año}${mes}${dia}`;
+                codigoInput.value = codigoSugerido;
+            }
+        });
+
+        // Validación en tiempo real del código de lote
+        document.getElementById('codigo_lote').addEventListener('blur', function() {
+            const codigo = this.value.trim();
+            if (codigo) {
+                // Simular validación de código único
+                // En producción, esto consultaría la base de datos
+                if (codigo === 'L001-2025' || codigo === 'L002-2025') {
+                    this.style.borderColor = '#dc3545';
+                    alert('Este código de lote ya existe. Por favor elija otro.');
+                } else {
+                    this.style.borderColor = '#28a745';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Alimentación - Sistema Piscícola</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #fd7e14 0%, #e8590c 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            border-bottom-color: #fd7e14;
+            background: #fff8f5;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            min-height: 700px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .form-container {
+            max-width: 900px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #fd7e14;
+            box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fd7e14 0%, #e8590c 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(253, 126, 20, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid #fd7e14;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fd7e14;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .alimentacion-card {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .alimentacion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .lote-info {
+            font-weight: 600;
+            color: #fd7e14;
+        }
+
+        .fecha-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .alimentacion-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e1e5e9;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .data-table tbody tr:hover {
+            background: #fff8f5;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input,
+        .search-filter select {
+            padding: 10px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            background: #fd7e14;
+            color: white;
+            border-color: #fd7e14;
+        }
+
+        .alimento-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .alimento-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .alimento-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .conversion-info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .conversion-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            🍽️ Registro de Alimentación
+        </h1>
+    </div>
+
+    <div class="container">
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">45.8 kg</div>
+                <div class="stat-label">Alimento consumido hoy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1,250 kg</div>
+                <div class="stat-label">Consumo mensual</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1.8</div>
+                <div class="stat-label">Factor conversión alimenticia</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Lotes alimentados hoy</div>
+            </div>
+        </div>
+
+        <!-- Alerta de inventario -->
+        <div class="warning-box">
+            <div class="warning-title">⚠️ Alertas de Inventario</div>
+            <div>
+                • Alimento Premium Pellets 4mm: Stock bajo (25 kg restantes)<br>
+                • Alimento Juvenil 2mm: Vencimiento próximo (3 días)<br>
+                • Artemia congelada: Agotado - Reposición urgente
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="showTab(event, 'registro-alimentacion')">Registrar Alimentación</div>
+            <div class="tab" onclick="showTab(event, 'historial')">Historial</div>
+            <div class="tab" onclick="showTab(event, 'inventario')">Inventario Alimentos</div>
+            <div class="tab" onclick="showTab(event, 'analisis')">Análisis Nutricional</div>
+        </div>
+
+        <div class="tab-content">
+            <!-- Registro de Alimentación -->
+            <div class="tab-pane active" id="registro-alimentacion">
+                <h3 style="margin-bottom: 25px; color: #333;">Registrar Nueva Alimentación</h3>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="alimentarTodosLotes()">Alimentar Todos los Lotes</button>
+                    <button class="quick-btn" onclick="copiarUltimaAlimentacion()">Copiar Última Alimentación</button>
+                    <button class="quick-btn" onclick="calcularRacionRecomendada()">Calcular Ración Recomendada</button>
+                    <button class="quick-btn" onclick="mostrarTablaConversion()">Ver Tabla de Conversión</button>
+                </div>
+
+                <div class="form-container">
+                    <form id="alimentacionForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="lote_alimentacion">Lote *</label>
+                                <select id="lote_alimentacion" name="id_lote" required onchange="cargarInfoLote()">
+                                    <option value="">Seleccionar lote</option>
+                                    <option value="1" data-peces="460" data-peso-prom="0.85" data-especie="Tilapia">L001-2025 - Tilapia - E001 (460 peces, 0.85 kg prom.)</option>
+                                    <option value="2" data-peces="264" data-peso-prom="0.72" data-especie="Carpa">L002-2025 - Carpa - E002 (264 peces, 0.72 kg prom.)</option>
+                                    <option value="3" data-peces="680" data-peso-prom="0.45" data-especie="Trucha">L003-2025 - Trucha - E003 (680 peces, 0.45 kg prom.)</option>
+                                    <option value="4" data-peces="320" data-peso-prom="0.95" data-especie="Tilapia">L004-2025 - Tilapia - E004 (320 peces, 0.95 kg prom.)</option>
+                                </select>
+                                <div id="info-lote" style="margin-top: 8px; font-size: 12px; color: #666; display: none;"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha_alimentacion">Fecha y Hora *</label>
+                                <input type="datetime-local" id="fecha_alimentacion" name="fecha" required>
+                                <small style="color: #666;">Hora exacta de la alimentación</small>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="tipo_alimento">Tipo de Alimento *</label>
+                                <select id="tipo_alimento" name="id_tipo_alimento" required onchange="mostrarInfoAlimento()">
+                                    <option value="">Seleccionar tipo de alimento</option>
+                                    <option value="1" data-presentacion="Pellets 2mm" data-proteina="28%" data-stock="150">Alimento Balanceado Iniciador</option>
+                                    <option value="2" data-presentacion="Pellets 4mm" data-proteina="32%" data-stock="25">Alimento Balanceado Premium</option>
+                                    <option value="3" data-presentacion="Pellets 6mm" data-proteina="30%" data-stock="80">Alimento Engorde</option>
+                                    <option value="4" data-presentacion="Extrudado flotante" data-proteina="35%" data-stock="60">Alimento Extrudado Especial</option>
+                                    <option value="5" data-presentacion="Congelado" data-proteina="45%" data-stock="0">Artemia Congelada</option>
+                                </select>
+                                <div id="info-alimento" style="margin-top: 8px; font-size: 12px; color: #666; display: none;"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidad_alimento">Cantidad (kg) *</label>
+                                <input type="number" step="0.001" id="cantidad_alimento" name="cantidad" min="0.001" required 
+                                       placeholder="Peso en kilogramos" onchange="calcularPorcentajes()">
+                                <div id="porcentaje-peso" style="margin-top: 5px; font-size: 12px; color: #fd7e14; display: none;"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="frecuencia_alimentacion">Frecuencia Diaria</label>
+                                <select id="frecuencia_alimentacion" name="frecuencia">
+                                    <option value="">Seleccionar frecuencia</option>
+                                    <option value="1 vez al día">1 vez al día (Mañana)</option>
+                                    <option value="2 veces al día">2 veces al día (Mañana y Tarde)</option>
+                                    <option value="3 veces al día">3 veces al día (Mañana, Mediodía, Tarde)</option>
+                                    <option value="4 veces al día">4 veces al día (Cada 6 horas)</option>
+                                    <option value="5 veces al día">5 veces al día (Cada 4.8 horas)</option>
+                                </select>
+                                <small style="color: #666;">Número de veces que se alimenta al día</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="comportamiento_peces">Comportamiento de los Peces</label>
+                                <select id="comportamiento_peces" name="comportamiento">
+                                    <option value="">Seleccionar comportamiento</option>
+                                    <option value="Muy activos, apetito excelente">Muy activos, apetito excelente</option>
+                                    <option value="Activos, buen apetito">Activos, buen apetito</option>
+                                    <option value="Normales, apetito regular">Normales, apetito regular</option>
+                                    <option value="Poco activos, apetito bajo">Poco activos, apetito bajo</option>
+                                    <option value="Inactivos, sin apetito">Inactivos, sin apetito</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="observaciones_alimentacion">Observaciones</label>
+                            <textarea id="observaciones_alimentacion" name="observacion" rows="4" 
+                                      placeholder="Condiciones climáticas, tiempo de consumo, restos de alimento, comportamiento especial, etc."></textarea>
+                        </div>
+
+                        <div class="conversion-info" id="conversion-info" style="display: none;">
+                            <div class="conversion-title">💡 Información Nutricional</div>
+                            <div id="conversion-details"></div>
+                        </div>
+
+                        <div style="padding-top: 20px; border-top: 1px solid #e1e5e9;">
+                            <button type="submit" class="btn-primary">Registrar Alimentación</button>
+                            <button type="reset" class="btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Historial -->
+            <div class="tab-pane" id="historial">
+                <h3 style="margin-bottom: 25px; color: #333;">Historial de Alimentación</h3>
+                
+                <!-- Filtros -->
+                <div class="search-filter">
+                    <select id="filtro_lote_hist">
+                        <option value="">Todos los lotes</option>
+                        <option value="L001-2025">L001-2025 - Tilapia</option>
+                        <option value="L002-2025">L002-2025 - Carpa</option>
+                        <option value="L003-2025">L003-2025 - Trucha</option>
+                    </select>
+                    <input type="date" id="filtro_fecha_inicio" placeholder="Fecha inicio">
+                    <input type="date" id="filtro_fecha_fin" placeholder="Fecha fin">
+                    <select id="filtro_alimento">
+                        <option value="">Todos los alimentos</option>
+                        <option value="Balanceado">Alimento Balanceado</option>
+                        <option value="Premium">Premium</option>
+                        <option value="Extrudado">Extrudado</option>
+                    </select>
+                    <button class="btn-primary" onclick="filtrarHistorial()">Filtrar</button>
+                </div>
+
+                <div class="alimentacion-card">
+                    <div class="alimentacion-header">
+                        <span class="lote-info">L001-2025 - Tilapia</span>
+                        <span class="fecha-info">17/09/2025 - 08:30</span>
+                    </div>
+                    <div class="alimentacion-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Alimento</div>
+                            <div class="detail-value">Premium 4mm</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cantidad</div>
+                            <div class="detail-value">12.5 kg</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">% Biomasa</div>
+                            <div class="detail-value">3.2%</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Frecuencia</div>
+                            <div class="detail-value">3 veces/día</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Comportamiento</div>
+                            <div class="detail-value">Activos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alimentacion-card">
+                    <div class="alimentacion-header">
+                        <span class="lote-info">L002-2025 - Carpa</span>
+                        <span class="fecha-info">17/09/2025 - 09:15</span>
+                    </div>
+                    <div class="alimentacion-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Alimento</div>
+                            <div class="detail-value">Balanceado 2mm</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cantidad</div>
+                            <div class="detail-value">8.2 kg</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">% Biomasa</div>
+                            <div class="detail-value">4.3%</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Frecuencia</div>
+                            <div class="detail-value">2 veces/día</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Comportamiento</div>
+                            <div class="detail-value">Muy activos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventario de Alimentos -->
+            <div class="tab-pane" id="inventario">
+                <h3 style="margin-bottom: 25px; color: #333;">Inventario de Alimentos</h3>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="agregarAlimento()">Agregar Alimento</button>
+                    <button class="quick-btn" onclick="registrarEntrada()">Registrar Entrada</button>
+                    <button class="quick-btn" onclick="ajusteInventario()">Ajuste de Inventario</button>
+                    <button class="quick-btn" onclick="generarReporteInventario()">Generar Reporte</button>
+                </div>
+
+                <div class="alimento-card">
+                    <div class="alimento-name">Alimento Balanceado Iniciador - Pellets 2mm</div>
+                    <div class="alimento-info">
+                        <div><strong>Stock actual:</strong> 150 kg</div>
+                        <div><strong>Proteína:</strong> 28%</div>
+                        <div><strong>Presentación:</strong> Sacos de 25 kg</div>
+                        <div><strong>Vencimiento:</strong> 15/12/2025</div>
+                        <div><strong>Costo/kg:</strong> Bs. 12.50</div>
+                        <div><strong>Estado:</strong> <span style="color: #28a745;">Suficiente</span></div>
+                    </div>
+                </div>
+
+                <div class="alimento-card">
+                    <div class="alimento-name">Alimento Balanceado Premium - Pellets 4mm</div>
+                    <div class="alimento-info">
+                        <div><strong>Stock actual:</strong> 25 kg</div>
+                        <div><strong>Proteína:</strong> 32%</div>
+                        <div><strong>Presentación:</strong> Sacos de 40 kg</div>
+                        <div><strong>Vencimiento:</strong> 22/11/2025</div>
+                        <div><strong>Costo/kg:</strong> Bs. 15.80</div>
+                        <div><strong>Estado:</strong> <span style="color: #dc3545;">Stock bajo</span></div>
+                    </div>
+                </div>
+
+                <div class="alimento-card">
+                    <div class="alimento-name">Artemia Congelada</div>
+                    <div class="alimento-info">
+                        <div><strong>Stock actual:</strong> 0 kg</div>
+                        <div><strong>Proteína:</strong> 45%</div>
+                        <div><strong>Presentación:</strong> Bandejas de 1 kg</div>
+                        <div><strong>Vencimiento:</strong> -</div>
+                        <div><strong>Costo/kg:</strong> Bs. 35.00</div>
+                        <div><strong>Estado:</strong> <span style="color: #dc3545;">Agotado</span></div>
+                    </div>
+                </div>
+
+                <!-- Tabla detallada -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Alimento</th>
+                                <th>Tipo Movimiento</th>
+                                <th>Cantidad (kg)</th>
+                                <th>Stock Resultante</th>
+                                <th>Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>17/09/2025</td>
+                                <td>Premium 4mm</td>
+                                <td>SALIDA</td>
+                                <td>-12.5</td>
+                                <td>25</td>
+                                <td>Alimentación L001-2025</td>
+                            </tr>
+                            <tr>
+                                <td>17/09/2025</td>
+                                <td>Balanceado 2mm</td>
+                                <td>SALIDA</td>
+                                <td>-8.2</td>
+                                <td>150</td>
+                                <td>Alimentación L002-2025</td>
+                            </tr>
+                            <tr>
+                                <td>15/09/2025</td>
+                                <td>Premium 4mm</td>
+                                <td>ENTRADA</td>
+                                <td>+40</td>
+                                <td>37.5</td>
+                                <td>Compra - Factura #1234</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Análisis Nutricional -->
+            <div class="tab-pane" id="analisis">
+                <h3 style="margin-bottom: 25px; color: #333;">Análisis Nutricional y Conversión Alimenticia</h3>
+                
+                <div class="form-grid" style="margin-bottom: 30px;">
+                    <div class="form-group">
+                        <label for="analisis_lote">Lote para Análisis</label>
+                        <select id="analisis_lote" onchange="generarAnalisisNutricional()">
+                            <option value="">Seleccionar lote</option>
+                            <option value="L001-2025">L001-2025 - Tilapia - E001</option>
+                            <option value="L002-2025">L002-2025 - Carpa - E002</option>
+                            <option value="L003-2025">L003-2025 - Trucha - E003</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodo_analisis">Período de Análisis</label>
+                        <select id="periodo_analisis">
+                            <option value="7">Últimos 7 días</option>
+                            <option value="15">Últimos 15 días</option>
+                            <option value="30">Último mes</option>
+                            <option value="90">Últimos 3 meses</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="resultado-analisis" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">1.8</div>
+                            <div class="stat-label">Factor de Conversión Alimenticia</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">3.2%</div>
+                            <div class="stat-label">% Promedio Biomasa</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">285 kg</div>
+                            <div class="stat-label">Alimento Consumido</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">158 kg</div>
+                            <div class="stat-label">Ganancia de Peso</div>
+                        </div>
+                    </div>
+
+                    <div class="conversion-info">
+                        <div class="conversion-title">📊 Análisis Detallado</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div>
+                                <h5 style="margin-bottom: 10px;">Eficiencia Alimenticia:</h5>
+                                <ul style="margin-left: 20px; line-height: 1.6;">
+                                    <li>FCA Objetivo: 1.5 - 2.0 (Óptimo: 1.8)</li>
+                                    <li>FCA Actual: 1.8 (Excelente)</li>
+                                    <li>Tendencia: Estable</li>
+                                    <li>Aprovechamiento: 95%</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 style="margin-bottom: 10px;">Recomendaciones:</h5>
+                                <ul style="margin-left: 20px; line-height: 1.6;">
+                                    <li>Mantener frecuencia actual (3 veces/día)</li>
+                                    <li>Monitorear temperatura del agua</li>
+                                    <li>Ajustar ración según crecimiento</li>
+                                    <li>Evaluar cambio a alimento de engorde</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de conversión estándar -->
+                <div class="conversion-info">
+                    <div class="conversion-title">📋 Tabla de Conversión Alimenticia Estándar</div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Especie</th>
+                                    <th>Fase</th>
+                                    <th>Peso Promedio</th>
+                                    <th>% Biomasa Diaria</th>
+                                    <th>Frecuencia</th>
+                                    <th>FCA Esperado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Tilapia</td>
+                                    <td>Alevinaje</td>
+                                    <td>0.1 - 0.5 g</td>
+                                    <td>8 - 15%</td>
+                                    <td>4-6 veces</td>
+                                    <td>1.2 - 1.5</td>
+                                </tr>
+                                <tr>
+                                    <td>Tilapia</td>
+                                    <td>Juvenil</td>
+                                    <td>5 - 50 g</td>
+                                    <td>5 - 8%</td>
+                                    <td>3-4 veces</td>
+                                    <td>1.4 - 1.8</td>
+                                </tr>
+                                <tr>
+                                    <td>Tilapia</td>
+                                    <td>Engorde</td>
+                                    <td>50 - 500 g</td>
+                                    <td>2 - 4%</td>
+                                    <td>2-3 veces</td>
+                                    <td>1.6 - 2.0</td>
+                                </tr>
+                                <tr>
+                                    <td>Carpa</td>
+                                    <td>Juvenil</td>
+                                    <td>10 - 100 g</td>
+                                    <td>4 - 6%</td>
+                                    <td>2-3 veces</td>
+                                    <td>1.8 - 2.2</td>
+                                </tr>
+                                <tr>
+                                    <td>Trucha</td>
+                                    <td>Juvenil</td>
+                                    <td>5 - 50 g</td>
+                                    <td>3 - 5%</td>
+                                    <td>3-4 veces</td>
+                                    <td>1.2 - 1.6</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            document.getElementById('fecha_alimentacion').value = now.toISOString().slice(0, 16);
+        });
+
+        // Función para cambiar de pestaña
+        function showTab(evt, tabName) {
+            var i, tabcontent, tabs;
+            
+            tabcontent = document.getElementsByClassName("tab-pane");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function goBack() {
+            window.location.href = 'dashboard.html';
+        }
+
+        // Funciones del formulario principal
+        function cargarInfoLote() {
+            const select = document.getElementById('lote_alimentacion');
+            const infoDiv = document.getElementById('info-lote');
+            const selectedOption = select.selectedOptions[0];
+            
+            if (selectedOption && selectedOption.value) {
+                const peces = selectedOption.getAttribute('data-peces');
+                const pesoProm = selectedOption.getAttribute('data-peso-prom');
+                const especie = selectedOption.getAttribute('data-especie');
+                const biomasaTotal = (parseFloat(peces) * parseFloat(pesoProm)).toFixed(1);
+                
+                infoDiv.innerHTML = `${especie} | ${peces} peces | Peso prom: ${pesoProm} kg | Biomasa total: ${biomasaTotal} kg`;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        function mostrarInfoAlimento() {
+            const select = document.getElementById('tipo_alimento');
+            const infoDiv = document.getElementById('info-alimento');
+            const selectedOption = select.selectedOptions[0];
+            
+            if (selectedOption && selectedOption.value) {
+                const presentacion = selectedOption.getAttribute('data-presentacion');
+                const proteina = selectedOption.getAttribute('data-proteina');
+                const stock = selectedOption.getAttribute('data-stock');
+                
+                let stockInfo = '';
+                if (parseInt(stock) === 0) {
+                    stockInfo = `<span style="color: #dc3545;">AGOTADO</span>`;
+                } else if (parseInt(stock) < 30) {
+                    stockInfo = `<span style="color: #ffc107;">Stock bajo: ${stock} kg</span>`;
+                } else {
+                    stockInfo = `<span style="color: #28a745;">Stock: ${stock} kg</span>`;
+                }
+                
+                infoDiv.innerHTML = `${presentacion} | Proteína: ${proteina} | ${stockInfo}`;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        function calcularPorcentajes() {
+            const loteSelect = document.getElementById('lote_alimentacion');
+            const cantidadInput = document.getElementById('cantidad_alimento');
+            const porcentajeDiv = document.getElementById('porcentaje-peso');
+            
+            const selectedOption = loteSelect.selectedOptions[0];
+            
+            if (selectedOption && selectedOption.value && cantidadInput.value) {
+                const peces = parseFloat(selectedOption.getAttribute('data-peces'));
+                const pesoProm = parseFloat(selectedOption.getAttribute('data-peso-prom'));
+                const biomasaTotal = peces * pesoProm;
+                const cantidadAlimento = parseFloat(cantidadInput.value);
+                
+                const porcentajeBiomasa = ((cantidadAlimento / biomasaTotal) * 100).toFixed(1);
+                const gramosPerPez = ((cantidadAlimento * 1000) / peces).toFixed(1);
+                
+                let mensaje = `${porcentajeBiomasa}% de la biomasa total | ${gramosPerPez}g por pez`;
+                let color = '#fd7e14';
+                
+                if (porcentajeBiomasa > 6) {
+                    mensaje += ' ⚠️ Cantidad alta - verificar';
+                    color = '#dc3545';
+                } else if (porcentajeBiomasa < 1) {
+                    mensaje += ' ⚠️ Cantidad muy baja';
+                    color = '#ffc107';
+                } else {
+                    mensaje += ' ✓ Cantidad apropiada';
+                    color = '#28a745';
+                }
+                
+                porcentajeDiv.innerHTML = mensaje;
+                porcentajeDiv.style.color = color;
+                porcentajeDiv.style.display = 'block';
+                
+                mostrarInfoConversion(biomasaTotal, cantidadAlimento, porcentajeBiomasa);
+            } else {
+                porcentajeDiv.style.display = 'none';
+                document.getElementById('conversion-info').style.display = 'none';
+            }
+        }
+
+        function mostrarInfoConversion(biomasa, cantidad, porcentaje) {
+            const conversionDiv = document.getElementById('conversion-info');
+            const detailsDiv = document.getElementById('conversion-details');
+            
+            const costoAprox = (cantidad * 14.5).toFixed(2); // Costo promedio por kg
+            
+            detailsDiv.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div><strong>Biomasa total:</strong> ${biomasa.toFixed(1)} kg</div>
+                    <div><strong>% de la biomasa:</strong> ${porcentaje}%</div>
+                    <div><strong>Costo aprox:</strong> Bs. ${costoAprox}</div>
+                    <div><strong>Proteína estimada:</strong> ${(cantidad * 0.3).toFixed(1)} kg</div>
+                </div>
+            `;
+            
+            conversionDiv.style.display = 'block';
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('info-lote').style.display = 'none';
+            document.getElementById('info-alimento').style.display = 'none';
+            document.getElementById('porcentaje-peso').style.display = 'none';
+            document.getElementById('conversion-info').style.display = 'none';
+        }
+
+        // Funciones de acciones rápidas
+        function alimentarTodosLotes() {
+            alert('Funcionalidad para alimentar todos los lotes activos con las raciones recomendadas.');
+        }
+
+        function copiarUltimaAlimentacion() {
+            alert('Copiando datos de la última alimentación registrada...');
+            // Simular copia de datos
+            document.getElementById('lote_alimentacion').value = '1';
+            document.getElementById('tipo_alimento').value = '2';
+            document.getElementById('cantidad_alimento').value = '12.5';
+            document.getElementById('frecuencia_alimentacion').value = '3 veces al día';
+            
+            cargarInfoLote();
+            mostrarInfoAlimento();
+            calcularPorcentajes();
+        }
+
+        function calcularRacionRecomendada() {
+            const loteSelect = document.getElementById('lote_alimentacion');
+            if (!loteSelect.value) {
+                alert('Primero seleccione un lote.');
+                return;
+            }
+            
+            const selectedOption = loteSelect.selectedOptions[0];
+            const peces = parseFloat(selectedOption.getAttribute('data-peces'));
+            const pesoProm = parseFloat(selectedOption.getAttribute('data-peso-prom'));
+            const biomasaTotal = peces * pesoProm;
+            
+            // Calcular ración recomendada (3% de la biomasa para engorde)
+            const racionRecomendada = (biomasaTotal * 0.03).toFixed(2);
+            
+            document.getElementById('cantidad_alimento').value = racionRecomendada;
+            calcularPorcentajes();
+            
+            alert(`Ración recomendada calculada: ${racionRecomendada} kg (3% de la biomasa)`);
+        }
+
+        function mostrarTablaConversion() {
+            // Cambiar a la pestaña de análisis
+            showTab({currentTarget: document.querySelector('.tab:nth-child(4)')}, 'analisis');
+        }
+
+        // Funciones para otras pestañas
+        function filtrarHistorial() {
+            alert('Aplicando filtros al historial de alimentación...');
+        }
+
+        function agregarAlimento() {
+            alert('Funcionalidad para agregar nuevo tipo de alimento al inventario.');
+        }
+
+        function registrarEntrada() {
+            alert('Funcionalidad para registrar entrada de alimento (compras, donaciones, etc.)');
+        }
+
+        function ajusteInventario() {
+            alert('Funcionalidad para realizar ajustes de inventario (pérdidas, ajustes de stock, etc.)');
+        }
+
+        function generarReporteInventario() {
+            alert('Generando reporte completo de inventario de alimentos...');
+        }
+
+        function generarAnalisisNutricional() {
+            const loteSelect = document.getElementById('analisis_lote');
+            const resultadoDiv = document.getElementById('resultado-analisis');
+            
+            if (loteSelect.value) {
+                resultadoDiv.style.display = 'block';
+                resultadoDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                resultadoDiv.style.display = 'none';
+            }
+        }
+
+        // Manejo del formulario principal
+        document.getElementById('alimentacionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const alimentacionData = Object.fromEntries(formData);
+            
+            // Validaciones
+            if (!alimentacionData.id_lote || !alimentacionData.fecha || !alimentacionData.id_tipo_alimento || !alimentacionData.cantidad) {
+                alert('Por favor complete todos los campos obligatorios.');
+                return;
+            }
+            
+            if (parseFloat(alimentacionData.cantidad) <= 0) {
+                alert('La cantidad debe ser mayor a 0.');
+                return;
+            }
+            
+            // Verificar stock disponible
+            const tipoAlimentoSelect = document.getElementById('tipo_alimento');
+            const selectedOption = tipoAlimentoSelect.selectedOptions[0];
+            const stockDisponible = parseInt(selectedOption.getAttribute('data-stock'));
+            const cantidadSolicitada = parseFloat(alimentacionData.cantidad);
+            
+            if (cantidadSolicitada > stockDisponible) {
+                if (!confirm(`Stock insuficiente. Disponible: ${stockDisponible} kg, Solicitado: ${cantidadSolicitada} kg. ¿Continuar?`)) {
+                    return;
+                }
+            }
+            
+            // Simular guardado exitoso
+            alert('Registro de alimentación guardado exitosamente!');
+            this.reset();
+            
+            // Restablecer fecha/hora
+            const now = new Date();
+            document.getElementById('fecha_alimentacion').value = now.toISOString().slice(0, 16);
+            
+            limpiarFormulario();
+        });
+    </script>
+</body>
+</html>
