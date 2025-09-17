@@ -1,0 +1,1447 @@
+<!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">Gestión de Especies</h1>
+            </div>
+            
+            <div class="user-menu">
+                <div class="user-info" id="userInfo">
+                    <div class="user-name">Carlos Rodriguez</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+                <div class="user-avatar" id="userAvatar">
+                    CR
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Search and Filters -->
+            <div class="search-filters">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label">Buscar Especie</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Nombre o código...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Vista</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="viewMode" id="cardView" checked>
+                            <label class="btn btn-outline-primary" for="cardView">
+                                <i class="fas fa-th-large"></i> Tarjetas
+                            </label>
+                            <input type="radio" class="btn-check" name="viewMode" id="tableView">
+                            <label class="btn btn-outline-primary" for="tableView">
+                                <i class="fas fa-table"></i> Tabla
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-success w-100" onclick="showAddSpeciesModal()">
+                            <i class="fas fa-plus me-2"></i>Nueva Especie
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-secondary w-100" onclick="clearFilters()">
+                            <i class="fas fa-eraser me-1"></i>Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card View -->
+            <div id="cardView" class="view-content">
+                <div class="species-grid" id="speciesGrid">
+                    <!-- Species cards will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div id="tableView" class="view-content" style="display: none;">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-dna"></i>
+                            Especies Registradas
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table table-hover" id="speciesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Peso Comercial (g)</th>
+                                        <th>Mercado Objetivo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="speciesTableBody">
+                                    <!-- Data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Species Modal -->
+    <div class="modal fade" id="speciesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="speciesModalTitle">
+                        <i class="fas fa-dna me-2"></i>Nueva Especie
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="speciesForm" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Código de Especie *</label>
+                                <input type="text" class="form-control" id="codigo" required maxlength="20" placeholder="ej: TRUCHA001">
+                                <div class="form-text">Código único para identificar la especie</div>
+                                <div class="invalid-feedback">El código es requerido</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre de la Especie *</label>
+                                <input type="text" class="form-control" id="nombre" required maxlength="60" placeholder="ej: Trucha Arcoíris">
+                                <div class="invalid-feedback">El nombre es requerido</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Peso Comercial Mínimo (g) *</label>
+                                <input type="number" class="form-control" id="pesoMin" required step="0.01" min="0" placeholder="250.00">
+                                <div class="invalid-feedback">El peso mínimo es requerido</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Peso Comercial Máximo (g) *</label>
+                                <input type="number" class="form-control" id="pesoMax" required step="0.01" min="0" placeholder="400.00">
+                                <div class="invalid-feedback">El peso máximo es requerido</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Mercado Objetivo</label>
+                                <select class="form-select" id="mercadoObjetivo">
+                                    <option value="Premium">Premium - Restaurantes especializados</option>
+                                    <option value="Intermedio">Intermedio - Supermercados</option>
+                                    <option value="Popular">Popular - Consumo masivo</option>
+                                    <option value="Mixto">Mixto - Todos los mercados</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Características Especiales</label>
+                                <textarea class="form-control" id="caracteristicas" rows="3" 
+                                         placeholder="Describe las características distintivas de esta especie..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tiempo de Crecimiento (meses)</label>
+                                <input type="number" class="form-control" id="tiempoCrecimiento" min="1" max="36" placeholder="18">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Temperatura Óptima (°C)</label>
+                                <input type="text" class="form-control" id="temperaturaOptima" placeholder="18-22">
+                            </div>
+                        </div>
+                        <input type="hidden" id="speciesId" value="">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="saveSpecies()">
+                        <i class="fas fa-save me-2"></i>Guardar Especie
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Species Details Modal -->
+    <div class="modal fade" id="speciesDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-info-circle me-2"></i>Detalles de la Especie
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="speciesDetailsContent">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        // Demo data for species based on database structure
+        let species = [
+            {
+                id: 1,
+                codigo: 'TRUCHA001',
+                nombre: 'Trucha Arcoíris',
+                pesoComercialMin: 250.00,
+                pesoComercialMax: 400.00,
+                mercadoObjetivo: 'Premium',
+                caracteristicas: 'Pez de agua fría con excelente sabor. Ideal para restaurantes gourmet. Requiere agua limpia y bien oxigenada.',
+                tiempoCrecimiento: 18,
+                temperaturaOptima: '12-18°C'
+            },
+            {
+                id: 2,
+                codigo: 'CARPA001',
+                nombre: 'Carpa Común',
+                pesoComercialMin: 200.00,
+                pesoComercialMax: 350.00,
+                mercadoObjetivo: 'Popular',
+                caracteristicas: 'Especie resistente y de rápido crecimiento. Adaptable a diferentes condiciones de agua. Mercado popular.',
+                tiempoCrecimiento: 12,
+                temperaturaOptima: '20-28°C'
+            },
+            {
+                id: 3,
+                codigo: 'TILAPIA001',
+                nombre: 'Tilapia',
+                pesoComercialMin: 150.00,
+                pesoComercialMax: 300.00,
+                mercadoObjetivo: 'Intermedio',
+                caracteristicas: 'Pez tropical de sabor suave. Excelente para filetes. Crecimiento rápido y buena conversión alimenticia.',
+                tiempoCrecimiento: 8,
+                temperaturaOptima: '26-30°C'
+            },
+            {
+                id: 4,
+                codigo: 'SALMON001',
+                nombre: 'Salmón del Atlántico',
+                pesoComercialMin: 400.00,
+                pesoComercialMax: 600.00,
+                mercadoObjetivo: 'Premium',
+                caracteristicas: 'Especie de alto valor comercial. Rica en omega-3. Requiere condiciones muy específicas de temperatura.',
+                tiempoCrecimiento: 24,
+                temperaturaOptima: '8-14°C'
+            }
+        ];
+
+        let dataTable;
+        let sidebarCollapsed = false;
+        let currentViewMode = 'card';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            setupEventListeners();
+            populateSpeciesGrid();
+            populateSpeciesTable();
+        });
+
+        function checkAuthentication() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (isLoggedIn !== 'true' || !currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            if (currentUser.role !== 'Administrador') {
+                alert('Acceso denegado. Solo administradores pueden acceder a esta página.');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+        }
+
+        function setupEventListeners() {
+            // View mode toggle
+            document.getElementById('cardView').addEventListener('change', () => switchView('card'));
+            document.getElementById('tableView').addEventListener('change', () => switchView('table'));
+            
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('keyup', filterSpecies);
+            
+            // Weight validation
+            document.getElementById('pesoMax').addEventListener('change', validateWeightRange);
+            document.getElementById('pesoMin').addEventListener('change', validateWeightRange);
+        }
+
+        function switchView(mode) {
+            const cardViewDiv = document.querySelector('#cardView').parentElement;
+            const tableViewDiv = document.querySelector('#tableView');
+            
+            if (mode === 'card') {
+                cardViewDiv.style.display = 'block';
+                tableViewDiv.style.display = 'none';
+                currentViewMode = 'card';
+            } else {
+                cardViewDiv.style.display = 'none';
+                tableViewDiv.style.display = 'block';
+                currentViewMode = 'table';
+                initializeDataTable();
+            }
+        }
+
+        function populateSpeciesGrid() {
+            const grid = document.getElementById('speciesGrid');
+            grid.innerHTML = species.map(specie => `
+                <div class="species-card" data-species-id="${specie.id}">
+                    <div class="species-header">
+                        <div class="species-icon">
+                            <i class="fas ${getSpeciesIcon(specie.nombre)}"></i>
+                        </div>
+                        <div class="species-name">${specie.nombre}</div>
+                        <div class="species-code">${specie.codigo}</div>
+                    </div>
+                    <div class="species-body">
+                        <div class="species-detail">
+                            <span class="detail-label">Peso Comercial</span>
+                            <span class="detail-value weight-range">${specie.pesoComercialMin}g - ${specie.pesoComercialMax}g</span>
+                        </div>
+                        <div class="species-detail">
+                            <span class="detail-label">Mercado</span>
+                            <span class="detail-value">${specie.mercadoObjetivo}</span>
+                        </div>
+                        <div class="species-detail">
+                            <span class="detail-label">Tiempo Crecimiento</span>
+                            <span class="detail-value">${specie.tiempoCrecimiento} meses</span>
+                        </div>
+                        <div class="species-detail">
+                            <span class="detail-label">Temperatura</span>
+                            <span class="detail-value">${specie.temperaturaOptima}</span>
+                        </div>
+                        <div class="species-actions">
+                            <button class="btn btn-sm btn-primary" onclick="viewSpeciesDetails(${specie.id})" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editSpecies(${specie.id})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSpecies(${specie.id})" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateSpeciesTable() {
+            const tbody = document.getElementById('speciesTableBody');
+            tbody.innerHTML = species.map(specie => `
+                <tr>
+                    <td>${specie.id}</td>
+                    <td><span class="badge bg-primary">${specie.codigo}</span></td>
+                    <td>${specie.nombre}</td>
+                    <td>${specie.pesoComercialMin}g - ${specie.pesoComercialMax}g</td>
+                    <td><span class="badge bg-success">${specie.mercadoObjetivo}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="viewSpeciesDetails(${specie.id})" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editSpecies(${specie.id})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSpecies(${specie.id})" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function initializeDataTable() {
+            if (dataTable) {
+                dataTable.destroy();
+            }
+            
+            dataTable = $('#speciesTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                },
+                pageLength: 10,
+                responsive: true,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ]
+            });
+        }
+
+        function getSpeciesIcon(nombre) {
+            const icons = {
+                'Trucha': 'fa-fish',
+                'Carpa': 'fa-fish-fins',
+                'Tilapia': 'fa-fish',
+                'Salmón': 'fa-fish'
+            };
+            
+            for (let key in icons) {
+                if (nombre.toLowerCase().includes(key.toLowerCase())) {
+                    return icons[key];
+                }
+            }
+            return 'fa-fish';
+        }
+
+        function filterSpecies() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filteredSpecies = species.filter(specie => 
+                specie.nombre.toLowerCase().includes(searchTerm) ||
+                specie.codigo.toLowerCase().includes(searchTerm) ||
+                specie.mercadoObjetivo.toLowerCase().includes(searchTerm)
+            );
+            
+            if (currentViewMode === 'card') {
+                updateSpeciesGrid(filteredSpecies);
+            } else {
+                updateSpeciesTable(filteredSpecies);
+            }
+        }
+
+        function updateSpeciesGrid(filteredSpecies) {
+            const grid = document.getElementById('speciesGrid');
+            
+            if (filteredSpecies.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No se encontraron especies</h5>
+                        <p class="text-muted">Intenta con diferentes términos de búsqueda</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredSpecies.map(specie => `
+                <div class="species-card" data-species-id="${specie.id}">
+                    <div class="species-header">
+                        <div class="species-icon">
+                            <i class="fas ${getSpeciesIcon(specie.nombre)}"></i>
+                        </div>
+                        <div class="species-name">${specie.nombre}</div>
+                        <div class="species-code">${specie.codigo}</div>
+                    </div>
+                    <div class="species-body">
+                        <div class="species-detail">
+                            <span class="detail-label">Peso Comercial</span>
+                            <span class="detail-value weight-range">${specie.pesoComercialMin}g - ${specie.pesoComercialMax}g</span>
+                        </div>
+                        <div class="species-detail">
+                            <span class="detail-label">Mercado</span>
+                            <span class="detail-value">${specie.mercadoObjetivo}</span>
+                        </div>
+                        <div class="species-detail">
+                            <span class="detail-label">Tiempo Crecimiento</span>
+                            <span class="detail-value">${specie.tiempoCrecimiento} meses</span>
+                        </div>
+                        <div class="species-detail">
+                            <span class="detail-label">Temperatura</span>
+                            <span class="detail-value">${specie.temperaturaOptima}</span>
+                        </div>
+                        <div class="species-actions">
+                            <button class="btn btn-sm btn-primary" onclick="viewSpeciesDetails(${specie.id})" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editSpecies(${specie.id})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSpecies(${specie.id})" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateSpeciesTable(filteredSpecies) {
+            if (dataTable) {
+                dataTable.clear();
+                
+                filteredSpecies.forEach(specie => {
+                    dataTable.row.add([
+                        specie.id,
+                        `<span class="badge bg-primary">${specie.codigo}</span>`,
+                        specie.nombre,
+                        `${specie.pesoComercialMin}g - ${specie.pesoComercialMax}g`,
+                        `<span class="badge bg-success">${specie.mercadoObjetivo}</span>`,
+                        `<div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="viewSpeciesDetails(${specie.id})" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editSpecies(${specie.id})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSpecies(${specie.id})" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>`
+                    ]);
+                });
+                
+                dataTable.draw();
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            filterSpecies();
+        }
+
+        function showAddSpeciesModal() {
+            document.getElementById('speciesModalTitle').innerHTML = '<i class="fas fa-dna me-2"></i>Nueva Especie';
+            document.getElementById('speciesForm').reset();
+            document.getElementById('speciesId').value = '';
+            
+            const modal = new bootstrap.Modal(document.getElementById('speciesModal'));
+            modal.show();
+        }
+
+        function editSpecies(speciesId) {
+            const specie = species.find(s => s.id === speciesId);
+            if (!specie) return;
+            
+            document.getElementById('speciesModalTitle').innerHTML = '<i class="fas fa-edit me-2"></i>Editar Especie';
+            document.getElementById('speciesId').value = specie.id;
+            document.getElementById('codigo').value = specie.codigo;
+            document.getElementById('nombre').value = specie.nombre;
+            document.getElementById('pesoMin').value = specie.pesoComercialMin;
+            document.getElementById('pesoMax').value = specie.pesoComercialMax;
+            document.getElementById('mercadoObjetivo').value = specie.mercadoObjetivo;
+            document.getElementById('caracteristicas').value = specie.caracteristicas || '';
+            document.getElementById('tiempoCrecimiento').value = specie.tiempoCrecimiento || '';
+            document.getElementById('temperaturaOptima').value = specie.temperaturaOptima || '';
+            
+            const modal = new bootstrap.Modal(document.getElementById('speciesModal'));
+            modal.show();
+        }
+
+        function validateWeightRange() {
+            const pesoMin = parseFloat(document.getElementById('pesoMin').value);
+            const pesoMax = parseFloat(document.getElementById('pesoMax').value);
+            
+            if (pesoMin && pesoMax && pesoMin >= pesoMax) {
+                document.getElementById('pesoMax').setCustomValidity('El peso máximo debe ser mayor al peso mínimo');
+                document.getElementById('pesoMax').classList.add('is-invalid');
+            } else {
+                document.getElementById('pesoMax').setCustomValidity('');
+                document.getElementById('pesoMax').classList.remove('is-invalid');
+            }
+        }
+
+        function saveSpecies() {
+            const form = document.getElementById('speciesForm');
+            
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+            
+            const speciesId = document.getElementById('speciesId').value;
+            const speciesData = {
+                codigo: document.getElementById('codigo').value.trim().toUpperCase(),
+                nombre: document.getElementById('nombre').value.trim(),
+                pesoComercialMin: parseFloat(document.getElementById('pesoMin').value),
+                pesoComercialMax: parseFloat(document.getElementById('pesoMax').value),
+                mercadoObjetivo: document.getElementById('mercadoObjetivo').value,
+                caracteristicas: document.getElementById('caracteristicas').value.trim(),
+                tiempoCrecimiento: parseInt(document.getElementById('tiempoCrecimiento').value) || null,
+                temperaturaOptima: document.getElementById('temperaturaOptima').value.trim() || null
+            };
+            
+            // Validate unique code
+            const existingSpecie = species.find(s => 
+                s.codigo === speciesData.codigo && s.id !== parseInt(speciesId)
+            );
+            
+            if (existingSpecie) {
+                showAlert('El código de especie ya existe en el sistema', 'danger');
+                return;
+            }
+            
+            if (speciesId) {
+                // Update existing species
+                const specieIndex = species.findIndex(s => s.id === parseInt(speciesId));
+                if (specieIndex !== -1) {
+                    species[specieIndex] = { ...species[specieIndex], ...speciesData };
+                    showAlert('Especie actualizada exitosamente', 'success');
+                }
+            } else {
+                // Add new species
+                const newSpecie = {
+                    id: Math.max(...species.map(s => s.id)) + 1,
+                    ...speciesData
+                };
+                species.push(newSpecie);
+                showAlert('Especie creada exitosamente', 'success');
+            }
+            
+            // Refresh views
+            populateSpeciesGrid();
+            populateSpeciesTable();
+            if (currentViewMode === 'table' && dataTable) {
+                dataTable.destroy();
+                initializeDataTable();
+            }
+            
+            // Close modal
+            bootstrap.Modal.getInstance(document.getElementById('speciesModal')).hide();
+            form.classList.remove('was-validated');
+        }
+
+        function viewSpeciesDetails(speciesId) {
+            const specie = species.find(s => s.id === speciesId);
+            if (!specie) return;
+            
+            const content = `
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="species-icon mb-3" style="width: 120px; height: 120px; font-size: 3rem; background: linear-gradient(135deg, var(--accent-teal), var(--success-green)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                            <i class="fas ${getSpeciesIcon(specie.nombre)}"></i>
+                        </div>
+                        <h4>${specie.nombre}</h4>
+                        <p class="text-muted">${specie.codigo}</p>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted mb-1">Peso Comercial Mínimo</h6>
+                                    <h4 class="text-primary mb-0">${specie.pesoComercialMin}g</h4>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted mb-1">Peso Comercial Máximo</h6>
+                                    <h4 class="text-primary mb-0">${specie.pesoComercialMax}g</h4>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted mb-1">Mercado Objetivo</h6>
+                                    <h5 class="text-success mb-0">${specie.mercadoObjetivo}</h5>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted mb-1">Tiempo de Crecimiento</h6>
+                                    <h5 class="text-warning mb-0">${specie.tiempoCrecimiento || 'N/A'} meses</h5>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${specie.temperaturaOptima ? `
+                        <div class="mt-3">
+                            <div class="border rounded p-3">
+                                <h6 class="text-muted mb-1">Temperatura Óptima</h6>
+                                <h5 class="text-info mb-0">${specie.temperaturaOptima}</h5>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                ${specie.caracteristicas ? `
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5>Características Especiales</h5>
+                        <div class="border rounded p-3 bg-light">
+                            <p class="mb-0">${specie.caracteristicas}</p>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5>Estadísticas de Producción</h5>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="text-center border rounded p-3">
+                                    <i class="fas fa-fish text-primary fa-2x mb-2"></i>
+                                    <h6 class="text-muted">Lotes Activos</h6>
+                                    <h4 class="text-primary">8</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center border rounded p-3">
+                                    <i class="fas fa-weight text-success fa-2x mb-2"></i>
+                                    <h6 class="text-muted">Biomasa Total</h6>
+                                    <h4 class="text-success">2,450 kg</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center border rounded p-3">
+                                    <i class="fas fa-chart-line text-warning fa-2x mb-2"></i>
+                                    <h6 class="text-muted">Tasa Crecimiento</h6>
+                                    <h4 class="text-warning">95%</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center border rounded p-3">
+                                    <i class="fas fa-dollar-sign text-info fa-2x mb-2"></i>
+                                    <h6 class="text-muted">Precio Promedio</h6>
+                                    <h4 class="text-info">${(Math.random() * 10 + 5).toFixed(2)}/kg</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('speciesDetailsContent').innerHTML = content;
+            
+            const modal = new bootstrap.Modal(document.getElementById('speciesDetailsModal'));
+            modal.show();
+        }
+
+        function deleteSpecies(speciesId) {
+            const specie = species.find(s => s.id === speciesId);
+            if (!specie) return;
+            
+            if (confirm(`¿Está seguro de eliminar la especie "${specie.nombre}"?\n\nEsta acción eliminará también todos los lotes asociados y no se puede deshacer.`)) {
+                species = species.filter(s => s.id !== speciesId);
+                showAlert('Especie eliminada exitosamente', 'success');
+                
+                // Refresh views
+                populateSpeciesGrid();
+                populateSpeciesTable();
+                if (currentViewMode === 'table' && dataTable) {
+                    dataTable.destroy();
+                    initializeDataTable();
+                }
+            }
+        }
+
+        function showAlert(message, type = 'info') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+
+        // Sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('show');
+            } else {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+                sidebarCollapsed = !sidebarCollapsed;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        // Handle responsive behavior
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+                if (sidebarCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.add('expanded');
+                }
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                sidebarCollapsed = false;
+            }
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const sidebarToggle = document.getElementById('sidebarToggle');
+                
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add form validation for species form
+            const form = document.getElementById('speciesForm');
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                });
+            }
+
+            // Auto-generate code suggestion
+            document.getElementById('nombre').addEventListener('blur', function() {
+                const nombre = this.value.trim();
+                const codigoField = document.getElementById('codigo');
+                
+                if (nombre && !codigoField.value) {
+                    const words = nombre.split(' ');
+                    let suggestion = '';
+                    
+                    if (words.length >= 2) {
+                        suggestion = words[0].substring(0, 3).toUpperCase() + words[1].substring(0, 3).toUpperCase();
+                    } else {
+                        suggestion = words[0].substring(0, 6).toUpperCase();
+                    }
+                    
+                    // Add numbers to make it unique
+                    let counter = 1;
+                    let finalSuggestion = suggestion + String(counter).padStart(3, '0');
+                    
+                    while (species.find(s => s.codigo === finalSuggestion)) {
+                        counter++;
+                        finalSuggestion = suggestion + String(counter).padStart(3, '0');
+                    }
+                    
+                    codigoField.value = finalSuggestion;
+                }
+            });
+
+            // Real-time code validation
+            document.getElementById('codigo').addEventListener('input', function() {
+                const codigo = this.value.toUpperCase();
+                this.value = codigo;
+                
+                const existingSpecie = species.find(s => s.codigo === codigo && s.id !== parseInt(document.getElementById('speciesId').value));
+                
+                if (existingSpecie) {
+                    this.setCustomValidity('Este código ya existe');
+                    this.classList.add('is-invalid');
+                } else {
+                    this.setCustomValidity('');
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'n':
+                        e.preventDefault();
+                        showAddSpeciesModal();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        document.getElementById('searchInput').focus();
+                        break;
+                }
+            }
+        });
+
+        // Add card hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add ripple effect to cards
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.species-card')) {
+                    const card = e.target.closest('.species-card');
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    
+                    const rect = card.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                    
+                    card.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                }
+            });
+        });
+
+        // Add CSS for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .species-card {
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            .action-buttons .btn {
+                transition: all 0.3s ease;
+            }
+            
+            .action-buttons .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Especies - Lagos Andinos SRL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --accent-teal: #0d9488;
+            --light-blue: #e0f2fe;
+            --success-green: #059669;
+            --warning-orange: #d97706;
+            --danger-red: #dc2626;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #334155;
+        }
+
+        /* Sidebar Styles - Similar to usuarios.html */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary-blue) 0%, #1e40af 100%);
+            color: white;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(30, 58, 138, 0.15);
+        }
+
+        .sidebar.collapsed { width: var(--sidebar-collapsed); }
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .sidebar.collapsed .sidebar-header { padding: 1.5rem 0.5rem; }
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed .logo {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            margin-bottom: 0;
+        }
+        .company-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .company-tagline {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed .company-name,
+        .sidebar.collapsed .company-tagline {
+            opacity: 0;
+            transform: scale(0);
+        }
+        .nav-menu { padding: 1rem 0; }
+        .nav-item { margin-bottom: 0.25rem; }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            border-radius: 0;
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            box-shadow: inset 4px 0 0 #fbbf24;
+        }
+        .nav-link i {
+            width: 24px;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed .nav-link {
+            padding: 1rem 0.5rem;
+            justify-content: center;
+        }
+        .sidebar.collapsed .nav-link i { margin-right: 0; }
+        .nav-text {
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .main-content.expanded { margin-left: var(--sidebar-collapsed); }
+
+        /* Top Navigation */
+        .top-nav {
+            background: white;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 1.5rem 0;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .sidebar-toggle:hover {
+            background: #f1f5f9;
+            color: var(--primary-blue);
+        }
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin: 0;
+        }
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-info { text-align: right; }
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-blue);
+            font-size: 0.95rem;
+        }
+        .user-role {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--secondary-blue), var(--accent-teal));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Content Styles */
+        .content-area { padding: 1.5rem; }
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .card-header {
+            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--success-green) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .card-body { padding: 2rem; }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        .btn-success { background: var(--success-green); border: none; border-radius: 8px; }
+        .btn-warning { background: var(--warning-orange); border: none; border-radius: 8px; }
+        .btn-danger { background: var(--danger-red); border: none; border-radius: 8px; }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .table { margin: 0; }
+        .table thead th {
+            background: #f8fafc;
+            border: none;
+            color: var(--primary-blue);
+            font-weight: 700;
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: #e2e8f0;
+        }
+        .table tbody tr:hover { background: #f8fafc; }
+
+        /* Species Card Styles */
+        .species-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .species-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .species-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-teal);
+        }
+        
+        .species-header {
+            background: linear-gradient(135deg, var(--accent-teal), var(--success-green));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .species-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .species-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .species-code {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .species-body {
+            padding: 1.5rem;
+        }
+        
+        .species-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .species-detail:last-of-type {
+            border-bottom: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+        
+        .species-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        /* Form Styles */
+        .search-filters {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Modal Enhancements */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        .modal-header {
+            background: linear-gradient(135deg, var(--accent-teal), var(--success-green));
+            color: white;
+            border-radius: 16px 16px 0 0;
+        }
+
+        /* Weight Range Display */
+        .weight-range {
+            background: linear-gradient(135deg, #fef3c7, #fed7aa);
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100%;
+            }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .main-content.expanded { margin-left: 0; }
+            .top-nav {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            .content-area { padding: 1rem; }
+            .user-info { display: none; }
+            .species-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-fish"></i>
+            </div>
+            <div class="company-name">Lagos Andinos</div>
+            <div class="company-tagline">Sistema de Piscicultura</div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item">
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="usuarios.html" class="nav-link">
+                    <i class="fas fa-users-cog"></i>
+                    <span class="nav-text">Usuarios</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-fish"></i>
+                    <span class="nav-text">Lotes</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-water"></i>
+                    <span class="nav-text">Estanques</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="especies.html" class="nav-link active">
+                    <i class="fas fa-dna"></i>
+                    <span class="nav-text">Especies</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-seedling"></i>
+                    <span class="nav-text">Alimentación</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-thermometer-half"></i>
+                    <span class="nav-text">Parámetros Agua</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cut"></i>
+                    <span class="nav-text">Cosecha</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="nav-text">Reportes</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="nav-text">Cerrar Sesión</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->

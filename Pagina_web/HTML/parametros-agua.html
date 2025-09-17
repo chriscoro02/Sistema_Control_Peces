@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parámetros de Agua - Lagos Andinos SRL</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --primary-blue:#1e3a8a;
+      --secondary-blue:#3b82f6;
+      --accent-teal:#0d9488;
+      --ok-green:#16a34a;
+      --warn-orange:#d97706;
+      --danger-red:#dc2626;
+      --info-blue:#0ea5e9;
+      --sidebar-width:280px;
+      --sidebar-collapsed:80px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;
+      background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);
+      color:#334155;overflow-x:hidden;
+    }
+    /* Sidebar */
+    .sidebar{
+      position:fixed;top:0;left:0;width:var(--sidebar-width);height:100vh;
+      background:linear-gradient(180deg,var(--primary-blue) 0%,#1e40af 100%);
+      color:#fff;z-index:1000;transition:all .3s cubic-bezier(.4,0,.2,1);
+      overflow-y:auto;box-shadow:4px 0 20px rgba(30,58,138,.15);
+    }
+    .sidebar.collapsed{width:var(--sidebar-collapsed)}
+    .sidebar-header{padding:2rem 1.5rem;text-align:center;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.1)}
+    .sidebar.collapsed .sidebar-header{padding:1.5rem .5rem}
+    .logo{width:60px;height:60px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.8rem;transition:.3s}
+    .sidebar.collapsed .logo{width:50px;height:50px;font-size:1.5rem;margin-bottom:0}
+    .company-name{font-size:1.4rem;font-weight:700;margin-bottom:.5rem;transition:.3s}
+    .company-tagline{font-size:.85rem;opacity:.8;transition:.3s}
+    .sidebar.collapsed .company-name,.sidebar.collapsed .company-tagline{opacity:0;transform:scale(0)}
+    .nav-menu{padding:1rem 0}
+    .nav-item{margin-bottom:.25rem}
+    .nav-link{display:flex;align-items:center;padding:1rem 1.5rem;color:rgba(255,255,255,.8);text-decoration:none;transition:.3s;position:relative}
+    .nav-link:hover{background:rgba(255,255,255,.1);color:#fff}
+    .nav-link.active{background:rgba(255,255,255,.15);box-shadow:inset 4px 0 0 #22c55e;color:#fff}
+    .nav-link i{width:24px;font-size:1.2rem;margin-right:1rem;transition:.3s}
+    .sidebar.collapsed .nav-link{padding:1rem .5rem;justify-content:center}
+    .sidebar.collapsed .nav-link i{margin-right:0}
+    .nav-text{font-weight:500;transition:.3s}
+    .sidebar.collapsed .nav-text{opacity:0;transform:translateX(-20px)}
+    /* Main */
+    .main-content{margin-left:var(--sidebar-width);min-height:100vh;transition:all .3s cubic-bezier(.4,0,.2,1)}
+    .main-content.expanded{margin-left:var(--sidebar-collapsed)}
+    .top-nav{background:#fff;padding:1.5rem 2rem;margin:1.5rem;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items:center}
+    .top-nav-left{display:flex;align-items:center;gap:1rem}
+    .sidebar-toggle{background:none;border:none;font-size:1.2rem;color:#64748b;cursor:pointer;padding:.5rem;border-radius:8px;transition:.2s}
+    .sidebar-toggle:hover{background:#f1f5f9;color:var(--primary-blue)}
+    .page-title{font-size:1.5rem;font-weight:700;color:var(--primary-blue);margin:0}
+    .user-menu{display:flex;align-items:center;gap:1rem}
+    .user-info{text-align:right}
+    .user-name{font-weight:600;color:var(--primary-blue);font-size:.95rem}
+    .user-role{font-size:.8rem;color:#64748b}
+    .user-avatar{width:48px;height:48px;background:linear-gradient(135deg,var(--secondary-blue),var(--accent-teal));border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem}
+    /* Content */
+    .content-area{padding:1.5rem}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+    .stat-card{background:#fff;padding:1.25rem;border-radius:12px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.05);border-left:4px solid var(--info-blue)}
+    .stat-number{font-size:2rem;font-weight:800;color:var(--primary-blue);margin-bottom:.25rem}
+    .stat-label{color:#64748b;font-size:.9rem;font-weight:600}
+    .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:2rem}
+    .action-card{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 4px rgba(0,0,0,.05);border-left:4px solid var(--accent-teal);cursor:pointer;transition:.2s;text-decoration:none;color:inherit}
+    .action-card:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(13,148,136,.18)}
+    .action-header{display:flex;align-items:center;gap:1rem;margin-bottom:.75rem}
+    .action-icon{width:48px;height:48px;background:var(--accent-teal);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.35rem}
+    .data-container{background:#fff;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);overflow:hidden;margin-bottom:2rem}
+    .data-header{background:linear-gradient(135deg,var(--primary-blue),var(--secondary-blue));color:#fff;padding:1.25rem 1.75rem;display:flex;justify-content:space-between;align-items:center}
+    .data-title{font-size:1.15rem;font-weight:700;display:flex;align-items:center;gap:.75rem;margin:0}
+    .data-body{padding:1.5rem}
+    .filter-section{background:#f0f9ff;padding:1rem;border:1px solid #e0f2fe;border-radius:12px;margin-bottom:1rem}
+    .table-container{overflow-x:auto;border-radius:12px;box-shadow:0 2px 4px rgba(0,0,0,.05)}
+    .table thead th{background:#f8fafc;border:none;color:var(--primary-blue);font-weight:700;padding:1rem;vertical-align:middle}
+    .table tbody td{padding:1rem;vertical-align:middle;border-color:#e2e8f0}
+    .estado-badge{padding:.35rem .65rem;border-radius:14px;font-size:.78rem;font-weight:700}
+    .estado-ok{background:#dcfce7;color:#166534}
+    .estado-warn{background:#fef3c7;color:#92400e}
+    .estado-crit{background:#fee2e2;color:#991b1b}
+    .mini{font-size:.9rem;color:#64748b}
+    /* Modal */
+    .modal-content{border:none;border-radius:16px;box-shadow:0 25px 50px rgba(0,0,0,.15)}
+    .modal-header{background:linear-gradient(135deg,var(--accent-teal),#14b8a6);color:#fff;border-radius:16px 16px 0 0;border-bottom:none}
+    .modal-header .btn-close{filter:invert(1)}
+    .form-control,.form-select{border:2px solid #e0f2fe;border-radius:8px;padding:.75rem;transition:.2s}
+    .form-control:focus,.form-select:focus{border-color:var(--accent-teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+    .btn-primary{background:linear-gradient(135deg,var(--accent-teal),#14b8a6);border:none;border-radius:10px;padding:.7rem 1.2rem;font-weight:700}
+    .btn-outline-secondary{border-width:2px}
+    /* Responsive */
+    @media (max-width:768px){
+      .sidebar{transform:translateX(-100%);width:100%}.sidebar.show{transform:translateX(0)}
+      .main-content{margin-left:0}.main-content.expanded{margin-left:0}
+      .top-nav{margin:1rem;padding:1rem}.content-area{padding:1rem}
+      .user-info{display:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo"><i class="fas fa-fish"></i></div>
+      <div class="company-name">Lagos Andinos</div>
+      <div class="company-tagline">Sistema de Piscicultura</div>
+    </div>
+    <div class="nav-menu">
+      <div class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i><span class="nav-text">Dashboard</span></a></div>
+      <div class="nav-item"><a href="usuarios.html" class="nav-link"><i class="fas fa-users-cog"></i><span class="nav-text">Usuarios</span></a></div>
+      <div class="nav-item"><a href="#" class="nav-link"><i class="fas fa-fish"></i><span class="nav-text">Lotes</span></a></div>
+      <div class="nav-item"><a href="estanques.html" class="nav-link"><i class="fas fa-water"></i><span class="nav-text">Estanques</span></a></div>
+      <div class="nav-item"><a href="especies.html" class="nav-link"><i class="fas fa-dna"></i><span class="nav-text">Especies</span></a></div>
+      <div class="nav-item"><a href="alimentacion.html" class="nav-link"><i class="fas fa-seedling"></i><span class="nav-text">Alimentación</span></a></div>
+      <div class="nav-item"><a href="parametros-agua.html" class="nav-link active"><i class="fas fa-thermometer-half"></i><span class="nav-text">Parámetros Agua</span></a></div>
+      <div class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cut"></i><span class="nav-text">Cosecha</span></a></div>
+      <div class="nav-item"><a href="#" class="nav-link"><i class="fas fa-chart-bar"></i><span class="nav-text">Reportes</span></a></div>
+      <div class="nav-item"><a href="#" class="nav-link" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span class="nav-text">Cerrar Sesión</span></a></div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main-content" id="mainContent">
+    <!-- Top bar -->
+    <div class="top-nav">
+      <div class="top-nav-left">
+        <button class="sidebar-toggle" onclick="toggleSidebar()" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <h1 class="page-title">Parámetros de Agua</h1>
+      </div>
+      <div class="user-menu">
+        <div class="user-info" id="userInfo">
+          <div class="user-name">Cargando...</div>
+          <div class="user-role">Usuario</div>
+        </div>
+        <div class="user-avatar" id="userAvatar">--</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content-area">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number" id="medicionesHoy">0</div>
+          <div class="stat-label">Mediciones Hoy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="estanquesMonitoreados">0</div>
+          <div class="stat-label">Estanques Monitoreados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="alertasActivas">0</div>
+          <div class="stat-label">Alertas Activas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="ultimaMedicion">—</div>
+          <div class="stat-label">Última Medición</div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <a href="#" class="action-card" onclick="showRegisterModal()">
+          <div class="action-header">
+            <div class="action-icon"><i class="fas fa-plus"></i></div>
+            <div>
+              <div class="fw-bold text-primary m-0">Registrar Medición</div>
+              <div class="mini">Temperatura, pH, O₂, etc.</div>
+            </div>
+          </div>
+          <div class="mini">Agrega una medición para un estanque</div>
+        </a>
+
+        <a href="#" class="action-card" onclick="showRangesModal()">
+          <div class="action-header">
+            <div class="action-icon"><i class="fas fa-sliders-h"></i></div>
+            <div>
+              <div class="fw-bold text-primary m-0">Rangos de Referencia</div>
+              <div class="mini">Define mínimos/máximos</div>
+            </div>
+          </div>
+          <div class="mini">Se guardan en este navegador</div>
+        </a>
+
+        <a href="#" class="action-card" onclick="exportData()">
+          <div class="action-header">
+            <div class="action-icon"><i class="fas fa-download"></i></div>
+            <div>
+              <div class="fw-bold text-primary m-0">Exportar</div>
+              <div class="mini">CSV/Excel (en desarrollo)</div>
+            </div>
+          </div>
+          <div class="mini">Filtra antes de exportar</div>
+        </a>
+
+        <a href="#" class="action-card" onclick="showProgramModal()">
+          <div class="action-header">
+            <div class="action-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div>
+              <div class="fw-bold text-primary m-0">Programar Mediciones</div>
+              <div class="mini">Automatiza horarios</div>
+            </div>
+          </div>
+          <div class="mini">Funcionalidad futura</div>
+        </a>
+      </div>
+
+      <!-- Historial -->
+      <div class="data-container">
+        <div class="data-header">
+          <div class="data-title"><i class="fas fa-table"></i> Historial de Mediciones</div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-light" onclick="showRegisterModal()"><i class="fas fa-plus me-2"></i>Nueva Medición</button>
+          </div>
+        </div>
+        <div class="data-body">
+          <div class="filter-section">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-3">
+                <label class="form-label">Buscar</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  <input type="text" id="searchInput" class="form-control" placeholder="Estanque o notas...">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Fecha</label>
+                <input type="date" id="dateFilter" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Estanque</label>
+                <select id="estanqueFilter" class="form-select">
+                  <option value="">Todos</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-secondary" onclick="clearFilters()"><i class="fas fa-eraser me-1"></i>Limpiar</button>
+                  <button class="btn btn-info" onclick="exportData()"><i class="fas fa-download me-1"></i>Exportar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="table table-hover" id="waterParamsTable">
+              <thead>
+                <tr>
+                  <th>Fecha/Hora</th>
+                  <th>Estanque</th>
+                  <th>Temp (°C)</th>
+                  <th>pH</th>
+                  <th>O₂ (mg/L)</th>
+                  <th>NH₃ (mg/L)</th>
+                  <th>NO₂⁻ (mg/L)</th>
+                  <th>Turbidez (NTU)</th>
+                  <th>Estado</th>
+                  <th>Registrado por</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="waterParamsTbody">
+                <tr>
+                  <td colspan="11" class="text-center text-muted py-4">
+                    <i class="fas fa-water fa-3x mb-3 d-block"></i>
+                    No hay mediciones registradas
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: Registrar -->
+  <div class="modal fade" id="registerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Registrar Parámetros</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="registerForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Estanque *</label>
+                <select id="estanqueSelect" class="form-select" required>
+                  <option value="">Seleccionar estanque...</option>
+                </select>
+                <div class="mini mt-1">Usa <code>estanque.id_estanque</code> / <code>estanque.codigo</code>.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Fecha y Hora *</label>
+                <input type="datetime-local" id="fechaParam" class="form-control" required>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Temperatura (°C)</label>
+                <input type="number" step="0.01" min="-5" max="50" id="inpTemperatura" class="form-control">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">pH</label>
+                <input type="number" step="0.01" min="0" max="14" id="inpPh" class="form-control">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Oxígeno disuelto (mg/L)</label>
+                <input type="number" step="0.01" min="0" max="30" id="inpOxigeno" class="form-control">
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Amonio (NH₃) mg/L</label>
+                <input type="number" step="0.001" min="0" id="inpAmonio" class="form-control">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Nitritos (NO₂⁻) mg/L</label>
+                <input type="number" step="0.001" min="0" id="inpNitritos" class="form-control">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Turbidez (NTU)</label>
+                <input type="number" step="0.01" min="0" id="inpTurbidez" class="form-control">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Observación</label>
+                <textarea id="inpObservacion" rows="3" class="form-control" placeholder="Comentarios, acciones correctivas, etc."></textarea>
+              </div>
+            </div>
+          </form>
+          <div class="mini mt-3">
+            Campos alineados con <code>parametro_agua</code> (fecha, temperatura, ph, oxigeno, amonio, nitritos, turbidez, observacion, registrado_por).
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary" onclick="saveWaterParam()"><i class="fas fa-save me-1"></i>Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Rangos -->
+  <div class="modal fade" id="rangesModal" tabindex="-1">
+    <div class="modal-dialog modal-lg"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-sliders-h me-2"></i>Rangos de Referencia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mini mb-3">Define los rangos “aceptables”. Se usarán para pintar el <strong>Estado</strong> (OK / Atención / Crítico). Se guarda en este navegador.</p>
+        <form id="rangesForm">
+          <div class="row g-3">
+            <!-- Temperatura -->
+            <div class="col-md-6">
+              <label class="form-label">Temperatura (°C)</label>
+              <div class="input-group">
+                <span class="input-group-text">Mín</span>
+                <input type="number" step="0.01" id="rTempMin" class="form-control">
+                <span class="input-group-text">Máx</span>
+                <input type="number" step="0.01" id="rTempMax" class="form-control">
+              </div>
+            </div>
+            <!-- pH -->
+            <div class="col-md-6">
+              <label class="form-label">pH</label>
+              <div class="input-group">
+                <span class="input-group-text">Mín</span>
+                <input type="number" step="0.01" id="rPhMin" class="form-control">
+                <span class="input-group-text">Máx</span>
+                <input type="number" step="0.01" id="rPhMax" class="form-control">
+              </div>
+            </div>
+            <!-- Oxígeno -->
+            <div class="col-md-6">
+              <label class="form-label">Oxígeno (mg/L)</label>
+              <div class="input-group">
+                <span class="input-group-text">Mín</span>
+                <input type="number" step="0.01" id="rOxiMin" class="form-control">
+                <span class="input-group-text">Máx</span>
+                <input type="number" step="0.01" id="rOxiMax" class="form-control">
+              </div>
+            </div>
+            <!-- Amonio -->
+            <div class="col-md-6">
+              <label class="form-label">Amonio (mg/L)</label>
+              <div class="input-group">
+                <span class="input-group-text">Mín</span>
+                <input type="number" step="0.001" id="rAmoMin" class="form-control">
+                <span class="input-group-text">Máx</span>
+                <input type="number" step="0.001" id="rAmoMax" class="form-control">
+              </div>
+            </div>
+            <!-- Nitritos -->
+            <div class="col-md-6">
+              <label class="form-label">Nitritos (mg/L)</label>
+              <div class="input-group">
+                <span class="input-group-text">Mín</span>
+                <input type="number" step="0.001" id="rNitMin" class="form-control">
+                <span class="input-group-text">Máx</span>
+                <input type="number" step="0.001" id="rNitMax" class="form-control">
+              </div>
+            </div>
+            <!-- Turbidez -->
+            <div class="col-md-6">
+              <label class="form-label">Turbidez (NTU)</label>
+              <div class="input-group">
+                <span class="input-group-text">Mín</span>
+                <input type="number" step="0.01" id="rTurMin" class="form-control">
+                <span class="input-group-text">Máx</span>
+                <input type="number" step="0.01" id="rTurMax" class="form-control">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveRanges()"><i class="fas fa-save me-1"></i>Guardar Rangos</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Modal: Programar (placeholder) -->
+  <div class="modal fade" id="programModal" tabindex="-1">
+    <div class="modal-dialog"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i>Programar Mediciones</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info"><i class="fas fa-info-circle me-2"></i>Próximamente.</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn btn-primary" disabled><i class="fas fa-calendar-plus me-1"></i>Programar</button>
+      </div>
+    </div></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ===== Estado (sin datos sembrados) =====
+    let parametrosAgua = [];   // registros (front-only)
+    let estanques = [];        // catálogo de estanques (front-only)
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      loadUserInfo();
+      setCurrentDateTime();
+      initFiltersAndSelects(); // no data seeds
+      updateStats();
+      loadRangesFromLS();
+    });
+
+    function checkAuth(){
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      if(isLoggedIn !== 'true'){ window.location.href='login.html'; return; }
+      currentUser = JSON.parse(localStorage.getItem('currentUser')) || {name:'', lastname:'', role:'Usuario'};
+    }
+
+    function loadUserInfo() {
+      const userInfo  = document.getElementById('userInfo');
+      const userAvatar = document.getElementById('userAvatar');
+
+      const name     = (currentUser?.name || 'Usuario');
+      const lastname = (currentUser?.lastname || '');
+      const role     = (currentUser?.role || 'Usuario');
+
+      userInfo.innerHTML = `
+        <div class="user-name">${name} ${lastname}</div>
+        <div class="user-role">${role}</div>
+      `;
+
+      const initials = (name[0] || '-') + (lastname[0] || '-');
+      userAvatar.textContent = initials.toUpperCase();
+    }
+
+    function setCurrentDateTime(){
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset()*60000).toISOString().slice(0,16);
+      document.getElementById('fechaParam').value = local;
+    }
+
+    function initFiltersAndSelects(){
+      // TODO: Cargar estanques desde API -> [{id_estanque, codigo}, ...]
+      // Ejemplo: estanques = await fetch('/api/estanques').then(r=>r.json());
+      updateEstanqueSelects();
+    }
+
+    function updateEstanqueSelects(){
+      const selects = ['estanqueSelect','estanqueFilter'];
+      selects.forEach(id=>{
+        const sel = document.getElementById(id);
+        if(!sel) return;
+        const keep = sel.value;
+        sel.innerHTML = (id==='estanqueFilter')?'<option value="">Todos</option>':'<option value="">Seleccionar estanque...</option>';
+        (estanques||[]).forEach(e=>{
+          const opt = document.createElement('option');
+          opt.value = e.id_estanque;
+          opt.textContent = e.codigo || ('EST-'+e.id_estanque);
+          sel.appendChild(opt);
+        });
+        sel.value = keep;
+      });
+    }
+
+    // ===== Rangos (localStorage) =====
+    const LS_RANGES_KEY = 'waterRanges';
+    let ranges = null;
+
+    function loadRangesFromLS(){
+      try{ ranges = JSON.parse(localStorage.getItem(LS_RANGES_KEY) || 'null'); }catch{ ranges = null; }
+      if(!ranges) return;
+
+      // pintar valores en el modal de forma segura
+      const byId = id => document.getElementById(id);
+      byId('rTempMin').value = ranges.temp?.min ?? '';
+      byId('rTempMax').value = ranges.temp?.max ?? '';
+      byId('rPhMin').value   = ranges.ph?.min ?? '';
+      byId('rPhMax').value   = ranges.ph?.max ?? '';
+      byId('rOxiMin').value  = ranges.oxi?.min ?? '';
+      byId('rOxiMax').value  = ranges.oxi?.max ?? '';
+      byId('rAmoMin').value  = ranges.amo?.min ?? '';
+      byId('rAmoMax').value  = ranges.amo?.max ?? '';
+      byId('rNitMin').value  = ranges.nit?.min ?? '';
+      byId('rNitMax').value  = ranges.nit?.max ?? '';
+      byId('rTurMin').value  = ranges.tur?.min ?? '';
+      byId('rTurMax').value  = ranges.tur?.max ?? '';
+    }
+
+    function saveRanges(){
+      const val = id => document.getElementById(id).value;
+
+      ranges = {
+        temp:{min: toNum(val('rTempMin')), max: toNum(val('rTempMax'))},
+        ph:  {min: toNum(val('rPhMin')),   max: toNum(val('rPhMax'))},
+        oxi: {min: toNum(val('rOxiMin')),  max: toNum(val('rOxiMax'))},
+        amo: {min: toNum(val('rAmoMin')),  max: toNum(val('rAmoMax'))},
+        nit: {min: toNum(val('rNitMin')),  max: toNum(val('rNitMax'))},
+        tur: {min: toNum(val('rTurMin')),  max: toNum(val('rTurMax'))}
+      };
+      localStorage.setItem(LS_RANGES_KEY, JSON.stringify(ranges));
+      bootstrap.Modal.getInstance(document.getElementById('rangesModal')).hide();
+      notify('Rangos guardados','success');
+      renderTable();
+      updateStats();
+    }
+
+    function toNum(v){ const n = parseFloat(v); return Number.isFinite(n)? n : null; }
+
+    // ===== Guardar Medición (front) =====
+    function saveWaterParam(){
+      const form = document.getElementById('registerForm');
+      if(!form.checkValidity()){ form.reportValidity(); return; }
+
+      const estId = document.getElementById('estanqueSelect').value;
+      const est = (estanques||[]).find(e=> String(e.id_estanque) === String(estId) );
+      const record = {
+        id: Date.now(),
+        id_estanque: estId,
+        estanque_codigo: est?.codigo || ('EST-'+estId),
+        fecha: document.getElementById('fechaParam').value,
+        temperatura: toNum(document.getElementById('inpTemperatura').value),
+        ph: toNum(document.getElementById('inpPh').value),
+        oxigeno: toNum(document.getElementById('inpOxigeno').value),
+        amonio: toNum(document.getElementById('inpAmonio').value),
+        nitritos: toNum(document.getElementById('inpNitritos').value),
+        turbidez: toNum(document.getElementById('inpTurbidez').value),
+        observacion: document.getElementById('inpObservacion').value?.trim() || '',
+        registrado_por: (currentUser && currentUser.id_usuario) || null,
+        registrado_nombre: currentUser ? `${currentUser.name||''} ${currentUser.lastname||''}`.trim() : '—'
+      };
+
+      parametrosAgua.unshift(record);
+      renderTable();
+      updateStats();
+
+      bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+      form.reset(); setCurrentDateTime();
+      notify('Medición guardada (demo, local)','success');
+    }
+
+    // ===== Tabla =====
+    function renderTable(){
+      const tbody = document.getElementById('waterParamsTbody');
+      if(!parametrosAgua.length){
+        tbody.innerHTML = `
+          <tr><td colspan="11" class="text-center text-muted py-4">
+            <i class="fas fa-water fa-3x mb-3 d-block"></i>No hay mediciones registradas
+          </td></tr>`;
+        return;
+      }
+
+      const rows = parametrosAgua.map(r=>{
+        const estado = buildEstado(r);
+        return `
+          <tr>
+            <td>${formatDateTime(r.fecha)}</td>
+            <td><span class="badge bg-primary">${r.estanque_codigo}</span></td>
+            <td>${fmt(r.temperatura)}</td>
+            <td>${fmt(r.ph)}</td>
+            <td>${fmt(r.oxigeno)}</td>
+            <td>${fmt(r.amonio)}</td>
+            <td>${fmt(r.nitritos)}</td>
+            <td>${fmt(r.turbidez)}</td>
+            <td>${estado.html}</td>
+            <td>${r.registrado_nombre || '—'}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="viewRecord(${r.id})"><i class="fas fa-eye"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteRecord(${r.id})"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>`;
+      }).join('');
+      tbody.innerHTML = rows;
+    }
+
+    function fmt(v){ return (v===null || v===undefined || Number.isNaN(v)) ? '—' : v; }
+    function formatDateTime(str){
+      if(!str) return '—';
+      const d = new Date(str);
+      return d.toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    }
+
+    function buildEstado(r){
+      if(!ranges) return {score:0, html:'<span class="estado-badge">—</span>'};
+      const checks = [
+        evalRange(r.temperatura, ranges.temp),
+        evalRange(r.ph, ranges.ph),
+        evalRange(r.oxigeno, ranges.oxi),
+        evalRange(r.amonio, ranges.amo),
+        evalRange(r.nitritos, ranges.nit),
+        evalRange(r.turbidez, ranges.tur)
+      ];
+      const score = checks.reduce((acc,c)=> Math.max(acc,c),0);
+      const label = score===0? 'OK' : score===1? 'Atención' : 'Crítico';
+      const cls = score===0? 'estado-ok' : score===1? 'estado-warn' : 'estado-crit';
+      return {score, html:`<span class="estado-badge ${cls}">${label}</span>`};
+    }
+
+    function evalRange(v, rng){
+      if(v===null || v===undefined || !rng) return 0;
+      const {min,max} = rng;
+      if(min===null && max===null) return 0;
+      if((min===null || v>=min) && (max===null || v<=max)) return 0;
+      return 2; // fuera de rango => crítico (demo)
+    }
+
+    function viewRecord(id){
+      const r = parametrosAgua.find(x=>x.id===id); if(!r) return;
+      alert(
+        `Medición\n\nEstanque: ${r.estanque_codigo}\nFecha: ${formatDateTime(r.fecha)}\n\n`+
+        `Temp: ${fmt(r.temperatura)} °C | pH: ${fmt(r.ph)} | O₂: ${fmt(r.oxigeno)} mg/L\n`+
+        `Amonio: ${fmt(r.amonio)} mg/L | Nitritos: ${fmt(r.nitritos)} mg/L | Turbidez: ${fmt(r.turbidez)} NTU\n\n`+
+        `Obs: ${r.observacion||'—'}`
+      );
+    }
+
+    function deleteRecord(id){
+      if(!confirm('¿Eliminar medición?')) return;
+      parametrosAgua = parametrosAgua.filter(x=>x.id!==id);
+      renderTable(); updateStats();
+      notify('Medición eliminada','success');
+    }
+
+    // ===== Filtros (ganchos listos) =====
+    document.getElementById('searchInput')?.addEventListener('input', ()=>{/* TODO: filtrar por texto */ renderTable();});
+    document.getElementById('dateFilter')?.addEventListener('change', ()=>{/* TODO: filtrar por fecha */ renderTable();});
+    document.getElementById('estanqueFilter')?.addEventListener('change', ()=>{/* TODO: filtrar por estanque */ renderTable();});
+
+    function clearFilters(){
+      document.getElementById('searchInput').value='';
+      document.getElementById('dateFilter').value='';
+      document.getElementById('estanqueFilter').value='';
+      renderTable();
+    }
+
+    // ===== Stats =====
+    function updateStats(){
+      const today = new Date().toISOString().slice(0,10);
+      const hoy = parametrosAgua.filter(r=> (r.fecha||'').slice(0,10)===today).length;
+      document.getElementById('medicionesHoy').textContent = hoy;
+
+      const uniq = new Set(parametrosAgua.map(r=>r.id_estanque));
+      document.getElementById('estanquesMonitoreados').textContent = uniq.size || 0;
+
+      let alertas = 0;
+      if(ranges){
+        alertas = parametrosAgua.reduce((acc,r)=> acc + (buildEstado(r).score===2?1:0), 0);
+      }
+      document.getElementById('alertasActivas').textContent = alertas;
+
+      const last = parametrosAgua[0]?.fecha;
+      document.getElementById('ultimaMedicion').textContent = last? formatDateTime(last) : '—';
+    }
+
+    // ===== UX =====
+    function notify(message,type='info'){
+      const el = document.createElement('div');
+      el.className = `alert alert-${type==='error'?'danger':type} alert-dismissible fade show position-fixed`;
+      el.style.cssText = 'top:20px;right:20px;z-index:9999;min-width:300px;';
+      el.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+      document.body.appendChild(el);
+      setTimeout(()=>{el?.remove?.()}, 4500);
+    }
+    function exportData(){ notify('Exportación en desarrollo','info'); }
+
+    // ===== Layout =====
+    function toggleSidebar(){
+      const sidebar = document.getElementById('sidebar');
+      const main = document.getElementById('mainContent');
+      if(window.innerWidth<=768){ sidebar.classList.toggle('show'); }
+      else{ sidebar.classList.toggle('collapsed'); main.classList.toggle('expanded'); }
+    }
+    function logout(){
+      localStorage.removeItem('currentUser'); localStorage.removeItem('isLoggedIn');
+      window.location.href='login.html';
+    }
+    window.addEventListener('resize',()=>{
+      const sidebar = document.getElementById('sidebar');
+      const main = document.getElementById('mainContent');
+      if(window.innerWidth>768){ sidebar.classList.remove('show'); }
+      else{ sidebar.classList.remove('collapsed'); main.classList.remove('expanded'); }
+    });
+  </script>
+</body>
+</html>
