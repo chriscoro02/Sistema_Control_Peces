@@ -173,7 +173,7 @@
             <p>Gestión Integral de Acuicultura</p>
         </div>
         
-        <form id="loginForm" action="dashboard.html" method="post">
+        <form id="loginForm"  method="post">
             <div id="errorMessage" class="error-message">
                 Credenciales incorrectas. Por favor, inténtalo de nuevo.
             </div>
@@ -190,7 +190,7 @@
                 <span class="icon">🔒</span>
             </div>
             
-            <button type="submit" class="login-btn">Iniciar Sesión</button>
+            <button type="submit" class="login-btn" action="./HTML/dashboard.html">Iniciar Sesión</button>
             
             <div class="forgot-password">
                 <a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a>
@@ -212,7 +212,7 @@
                 // Simulamos login exitoso
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('userEmail', email);
-                window.location.href = 'dashboard.html';
+                window.location.href = './HTML/dashboard.html';
             } else {
                 errorMessage.style.display = 'block';
                 setTimeout(() => {
