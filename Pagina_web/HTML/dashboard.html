@@ -1,570 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sistema de Gestión Piscícola</title>
-    <link rel="stylesheet" href="/Pagina_web/CSS/style_dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Sistema de Gestión Piscícola</title>
+  <!-- Ajusta la ruta si tu CSS está en otra carpeta -->
+  <link rel="stylesheet" href="/Pagina_web/CSS/style_dashboard.css">
 </head>
 <body>
-    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-    
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h1>🐟 Sistema Piscícola</h1>
-                <p>Gestión Integral de Acuicultura</p>
-            </div>
-            
-            <nav class="menu">
-                <a href="#" class="menu-item active" onclick="showContent('dashboard')">
-                    <span class="icon">📊</span>
-                    <span class="text">Dashboard</span>
-                </a>
-                <a href="#" class="menu-item" onclick="showContent('cosecha')">
-                    <span class="icon">🎣</span>
-                    <span class="text">Cosecha</span>
-                </a>
-                <a href="#" class="menu-item" onclick="showContent('lote')">
-                    <span class="icon">🏷️</span>
-                    <span class="text">Lote</span>
-                </a>
-                <a href="#" class="menu-item" onclick="showContent('parametro-agua')">
-                    <span class="icon">🌊</span>
-                    <span class="text">Parámetro de Agua</span>
-                </a>
-                <a href="#" class="menu-item" onclick="showContent('alimentacion')">
-                    <span class="icon">🍽️</span>
-                    <span class="text">Registro de Alimentación</span>
-                </a>
-                <a href="#" class="menu-item" onclick="showContent('venta')">
-                    <span class="icon">💰</span>
-                    <span class="text">Registro de Venta</span>
-                </a>
-            </nav>
-            
-            <div class="user-info">
-                <div class="user-name" id="userName">Usuario</div>
-                <div class="user-role">Administrador</div>
-                <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
-            </div>
+  <!-- Botón móvil -->
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1>Sistema Piscícola</h1>
+        <p>Gestión Integral de Acuicultura</p>
+      </div>
+
+      <nav class="menu">
+        <a href="#" class="menu-item active" onclick="showDashboard(event)">
+          <span class="text">Dashboard</span>
+        </a>
+      </nav>
+
+      <div class="user-info">
+        <div class="user-name" id="userName">Usuario</div>
+        <div class="user-role">Administrador</div>
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <header class="header">
+        <h2 id="pageTitle">Dashboard</h2>
+        <div class="date" id="currentDate"></div>
+      </header>
+
+      <section class="content-area active" id="dashboard-content">
+        <div class="dashboard-cards">
+          <div class="dashboard-card">
+            <h3>Total Lotes Activos</h3>
+            <div class="number">24</div>
+            <div class="description">Lotes en producción</div>
+          </div>
+          <div class="dashboard-card">
+            <h3>Cosechas del Mes</h3>
+            <div class="number">8</div>
+            <div class="description">Cosechas realizadas</div>
+          </div>
+          <div class="dashboard-card">
+            <h3>Estanques Operativos</h3>
+            <div class="number">15</div>
+            <div class="description">En buen estado</div>
+          </div>
+          <div class="dashboard-card">
+            <h3>Ventas del Mes</h3>
+            <div class="number">12</div>
+            <div class="description">Transacciones completadas</div>
+          </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h2 id="pageTitle">Dashboard</h2>
-                <div class="date" id="currentDate"></div>
-            </div>
-
-            <!-- Dashboard Content -->
-            <div class="content-area active" id="dashboard-content">
-                <div class="dashboard-cards">
-                    <div class="dashboard-card">
-                        <h3>Total Lotes Activos</h3>
-                        <div class="number">24</div>
-                        <div class="description">Lotes en producción</div>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>Cosechas del Mes</h3>
-                        <div class="number">8</div>
-                        <div class="description">Cosechas realizadas</div>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>Estanques Operativos</h3>
-                        <div class="number">15</div>
-                        <div class="description">En buen estado</div>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>Ventas del Mes</h3>
-                        <div class="number">12</div>
-                        <div class="description">Transacciones completadas</div>
-                    </div>
-                </div>
-                
-                <h3 style="margin-bottom: 20px; color: #333;">Bienvenido al Sistema de Gestión Piscícola</h3>
-                <p style="color: #666; line-height: 1.6;">
-                    Este sistema te permite gestionar de manera integral tu operación de acuicultura. 
-                    Utiliza el menú lateral para acceder a las diferentes funcionalidades del sistema.
-                </p>
-            </div>
-
-            <!-- Cosecha Content -->
-            <div class="content-area" id="cosecha-content">
-                <h3 style="margin-bottom: 25px;">Registro de Cosecha</h3>
-                <div class="form-container">
-                    <form id="cosechaForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="cosecha_lote">Lote</label>
-                                <select id="cosecha_lote" name="id_lote" required>
-                                    <option value="">Seleccionar lote</option>
-                                    <option value="1">L001 - Tilapia - Estanque E001</option>
-                                    <option value="2">L002 - Carpa - Estanque E002</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cosecha_fecha">Fecha de Cosecha</label>
-                                <input type="datetime-local" id="cosecha_fecha" name="fecha" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="cosecha_cantidad">Cantidad Total</label>
-                                <input type="number" id="cosecha_cantidad" name="cantidad_total" min="1" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cosecha_peso_promedio">Peso Promedio (kg)</label>
-                                <input type="number" step="0.01" id="cosecha_peso_promedio" name="peso_promedio">
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="cosecha_calidad">Clasificación de Calidad</label>
-                                <select id="cosecha_calidad" name="id_calidad">
-                                    <option value="">Seleccionar calidad</option>
-                                    <option value="1">Primera Calidad</option>
-                                    <option value="2">Segunda Calidad</option>
-                                    <option value="3">Tercera Calidad</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cosecha_peso_categoria">Categoría de Peso</label>
-                                <select id="cosecha_peso_categoria" name="id_peso">
-                                    <option value="">Seleccionar categoría</option>
-                                    <option value="1">Pequeño (< 500g)</option>
-                                    <option value="2">Mediano (500g - 1kg)</option>
-                                    <option value="3">Grande (> 1kg)</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="btn-primary">Registrar Cosecha</button>
-                        <button type="reset" class="btn-secondary">Limpiar</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Lote Content -->
-            <div class="content-area" id="lote-content">
-                <h3 style="margin-bottom: 25px;">Gestión de Lotes</h3>
-                <div class="form-container">
-                    <form id="loteForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="lote_codigo">Código del Lote</label>
-                                <input type="text" id="lote_codigo" name="codigo_lote" maxlength="30" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lote_estanque">Estanque</label>
-                                <select id="lote_estanque" name="id_estanque" required>
-                                    <option value="">Seleccionar estanque</option>
-                                    <option value="1">E001 - Tierra - 1000 peces</option>
-                                    <option value="2">E002 - Concreto - 1500 peces</option>
-                                    <option value="3">E003 - Jaula - 800 peces</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="lote_especie">Especie</label>
-                                <select id="lote_especie" name="id_especie" required>
-                                    <option value="">Seleccionar especie</option>
-                                    <option value="1">Tilapia</option>
-                                    <option value="2">Carpa</option>
-                                    <option value="3">Trucha</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="lote_proveedor">Proveedor</label>
-                                <select id="lote_proveedor" name="id_proveedor">
-                                    <option value="">Seleccionar proveedor</option>
-                                    <option value="1">Proveedor A</option>
-                                    <option value="2">Proveedor B</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="lote_fecha_siembra">Fecha de Siembra</label>
-                                <input type="date" id="lote_fecha_siembra" name="fecha_siembra" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lote_cantidad_inicial">Cantidad Inicial</label>
-                                <input type="number" id="lote_cantidad_inicial" name="cantidad_inicial" min="1" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="lote_origen">Origen</label>
-                            <input type="text" id="lote_origen" name="origen" maxlength="80">
-                        </div>
-                        
-                        <button type="submit" class="btn-primary">Crear Lote</button>
-                        <button type="reset" class="btn-secondary">Limpiar</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Parámetro de Agua Content -->
-            <div class="content-area" id="parametro-agua-content">
-                <h3 style="margin-bottom: 25px;">Parámetros de Calidad del Agua</h3>
-                <div class="form-container">
-                    <form id="parametroAguaForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="param_estanque">Estanque</label>
-                                <select id="param_estanque" name="id_estanque" required>
-                                    <option value="">Seleccionar estanque</option>
-                                    <option value="1">E001 - Tierra</option>
-                                    <option value="2">E002 - Concreto</option>
-                                    <option value="3">E003 - Jaula</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="param_fecha">Fecha y Hora</label>
-                                <input type="datetime-local" id="param_fecha" name="fecha" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="param_temperatura">Temperatura (°C)</label>
-                                <input type="number" step="0.01" id="param_temperatura" name="temperatura" min="0" max="50">
-                            </div>
-                            <div class="form-group">
-                                <label for="param_ph">pH</label>
-                                <input type="number" step="0.01" id="param_ph" name="ph" min="0" max="14">
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="param_oxigeno">Oxígeno Disuelto (mg/L)</label>
-                                <input type="number" step="0.01" id="param_oxigeno" name="oxigeno" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label for="param_amonio">Amonio (mg/L)</label>
-                                <input type="number" step="0.001" id="param_amonio" name="amonio" min="0">
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="param_nitritos">Nitritos (mg/L)</label>
-                                <input type="number" step="0.001" id="param_nitritos" name="nitritos" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label for="param_turbidez">Turbidez (NTU)</label>
-                                <input type="number" step="0.01" id="param_turbidez" name="turbidez" min="0">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="param_observacion">Observaciones</label>
-                            <textarea id="param_observacion" name="observacion" maxlength="255" placeholder="Observaciones sobre la calidad del agua..."></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn-primary">Registrar Parámetros</button>
-                        <button type="reset" class="btn-secondary">Limpiar</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Registro de Alimentación Content -->
-            <div class="content-area" id="alimentacion-content">
-                <h3 style="margin-bottom: 25px;">Registro de Alimentación</h3>
-                <div class="form-container">
-                    <form id="alimentacionForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="alim_lote">Lote</label>
-                                <select id="alim_lote" name="id_lote" required>
-                                    <option value="">Seleccionar lote</option>
-                                    <option value="1">L001 - Tilapia - Estanque E001</option>
-                                    <option value="2">L002 - Carpa - Estanque E002</option>
-                                    <option value="3">L003 - Trucha - Estanque E003</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="alim_fecha">Fecha y Hora</label>
-                                <input type="datetime-local" id="alim_fecha" name="fecha" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="alim_tipo">Tipo de Alimento</label>
-                                <select id="alim_tipo" name="id_tipo_alimento" required>
-                                    <option value="">Seleccionar tipo</option>
-                                    <option value="1">Alimento Balanceado - Pellets 2mm</option>
-                                    <option value="2">Alimento Balanceado - Pellets 4mm</option>
-                                    <option value="3">Alimento Extrudado - Premium</option>
-                                    <option value="4">Alimento Natural - Artemia</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="alim_cantidad">Cantidad (kg)</label>
-                                <input type="number" step="0.001" id="alim_cantidad" name="cantidad" min="0.001" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="alim_frecuencia">Frecuencia</label>
-                                <select id="alim_frecuencia" name="frecuencia">
-                                    <option value="">Seleccionar frecuencia</option>
-                                    <option value="1 vez al día">1 vez al día</option>
-                                    <option value="2 veces al día">2 veces al día</option>
-                                    <option value="3 veces al día">3 veces al día</option>
-                                    <option value="4 veces al día">4 veces al día</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="alim_comportamiento">Comportamiento</label>
-                                <input type="text" id="alim_comportamiento" name="comportamiento" maxlength="120" placeholder="Ej: Activos, Apetito normal">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="alim_observacion">Observaciones</label>
-                            <textarea id="alim_observacion" name="observacion" maxlength="255" placeholder="Observaciones adicionales sobre la alimentación..."></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn-primary">Registrar Alimentación</button>
-                        <button type="reset" class="btn-secondary">Limpiar</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Registro de Venta Content -->
-            <div class="content-area" id="venta-content">
-                <h3 style="margin-bottom: 25px;">Registro de Venta</h3>
-                <div class="form-container">
-                    <form id="ventaForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="venta_cosecha">Cosecha</label>
-                                <select id="venta_cosecha" name="id_cosecha" required>
-                                    <option value="">Seleccionar cosecha</option>
-                                    <option value="1">C001 - Lote L001 - 2025-09-15 - 500 peces</option>
-                                    <option value="2">C002 - Lote L002 - 2025-09-14 - 300 peces</option>
-                                    <option value="3">C003 - Lote L003 - 2025-09-13 - 750 peces</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="venta_destino">Destino de Venta</label>
-                                <select id="venta_destino" name="id_destino" required>
-                                    <option value="">Seleccionar destino</option>
-                                    <option value="1">Mercado Local</option>
-                                    <option value="2">Restaurante</option>
-                                    <option value="3">Distribuidor</option>
-                                    <option value="4">Exportación</option>
-                                    <option value="5">Procesadora</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="venta_estado">Estado</label>
-                                <select id="venta_estado" name="estado">
-                                    <option value="">Seleccionar estado</option>
-                                    <option value="Fresco">Fresco</option>
-                                    <option value="Congelado">Congelado</option>
-                                    <option value="Procesado">Procesado</option>
-                                    <option value="Fileteado">Fileteado</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="venta_fecha_salida">Fecha y Hora de Salida</label>
-                                <input type="datetime-local" id="venta_fecha_salida" name="fecha_salida" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="venta_temperatura">Temperatura de Transporte (°C)</label>
-                                <input type="number" step="0.01" id="venta_temperatura" name="temperatura_transporte" placeholder="Ej: 4.0 para refrigerado">
-                            </div>
-                            <div class="form-group">
-                                <label for="venta_precio">Precio por Kg (Bs)</label>
-                                <input type="number" step="0.01" id="venta_precio" name="precio_kg" min="0" placeholder="Precio unitario">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="venta_observacion">Observaciones</label>
-                            <textarea id="venta_observacion" name="observacion" maxlength="255" placeholder="Observaciones sobre la venta, condiciones especiales, etc."></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn-primary">Registrar Venta</button>
-                        <button type="reset" class="btn-secondary">Limpiar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            // Verificar si el usuario está logueado
-            if (!localStorage.getItem('isLoggedIn')) {
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Mostrar email del usuario
-            const userEmail = localStorage.getItem('userEmail');
-            if (userEmail) {
-                document.getElementById('userName').textContent = userEmail;
-            }
-            
-            // Mostrar fecha actual
-            const now = new Date();
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('es-ES', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            
-            // Establecer fecha/hora actual en los formularios
-            const currentDateTime = now.toISOString().slice(0, 16);
-            document.querySelectorAll('input[type="datetime-local"]').forEach(input => {
-                if (!input.value) {
-                    input.value = currentDateTime;
-                }
-            });
-        });
-
-        // Funciones de navegación
-        function showContent(contentId) {
-            // Ocultar todas las áreas de contenido
-            document.querySelectorAll('.content-area').forEach(area => {
-                area.classList.remove('active');
-            });
-            
-            // Mostrar el contenido seleccionado
-            document.getElementById(contentId + '-content').classList.add('active');
-            
-            // Actualizar menú activo
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.target.closest('.menu-item').classList.add('active');
-            
-            // Actualizar título de página
-            const titles = {
-                'dashboard': 'Dashboard',
-                'cosecha': 'Registro de Cosecha',
-                'lote': 'Gestión de Lotes',
-                'parametro-agua': 'Parámetros de Agua',
-                'alimentacion': 'Registro de Alimentación',
-                'venta': 'Registro de Venta'
-            };
-            document.getElementById('pageTitle').textContent = titles[contentId];
-            
-            // Cerrar sidebar en móvil
-            if (window.innerWidth <= 768) {
-                document.getElementById('sidebar').classList.remove('open');
-            }
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
-
-        function logout() {
-            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userEmail');
-                window.location.href = 'login.html';
-            }
-        }
-
-        // Event listeners para formularios
-        document.getElementById('cosechaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Cosecha registrada exitosamente');
-            this.reset();
-        });
-
-        document.getElementById('loteForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Lote creado exitosamente');
-            this.reset();
-        });
-
-        document.getElementById('parametroAguaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Parámetros de agua registrados exitosamente');
-            this.reset();
-        });
-
-        document.getElementById('alimentacionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Registro de alimentación guardado exitosamente');
-            this.reset();
-        });
-
-        document.getElementById('ventaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Venta registrada exitosamente');
-            this.reset();
-        });
-
-        // Cerrar sidebar al hacer clic fuera de él en móvil
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                const sidebar = document.getElementById('sidebar');
-                const menuBtn = document.querySelector('.mobile-menu-btn');
-                
-                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
-                    sidebar.classList.remove('open');
-                }
-            }
-        });
-
-        // Validaciones específicas
-        document.getElementById('cosecha_cantidad').addEventListener('input', function() {
-            if (this.value < 1) {
-                this.setCustomValidity('La cantidad debe ser mayor a 0');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        document.getElementById('param_ph').addEventListener('input', function() {
-            if (this.value < 0 || this.value > 14) {
-                this.setCustomValidity('El pH debe estar entre 0 y 14');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        // Auto-guardar en localStorage (simulación)
-        function autoSave(formId, data) {
-            localStorage.setItem('draft_' + formId, JSON.stringify(data));
-        }
-
-        // Recuperar borradores
-        function loadDraft(formId) {
-            const draft = localStorage.getItem('draft_' + formId);
-            if (draft) {
-                const data = JSON.parse(draft);
-                Object.keys(data).forEach(key => {
-                    const field = document.getElementsByName(key)[0];
-                    if (field) field.value = data[key];
-                });
-            }
-        }
-    </script>
+        <h3 style="margin-bottom: 20px; color: #333;">Bienvenido al Sistema de Gestión Piscícola</h3>
+        <p style="color: #666; line-height: 1.6;">
+          Utiliza el menú lateral para navegar. Esta vista muestra indicadores generales del sistema.
+        </p>
+      </section>
+    </main>
+  </div>
+  <script src="/Pagina_web/JS/script_dashboard.js"></script>
 </body>
 </html>
