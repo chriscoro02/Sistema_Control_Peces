@@ -10,6 +10,7 @@ const selEst = $("#selEstanque");
 const selEsp = $("#selEspecie");
 const selPro = $("#selProveedor");
 const form   = $("#frmLote");
+const usuarioBox = document.getElementById("usuarioBox"); // ← NUEVO
 
 async function requireSession() {
   const r = await fetch(URL_CHECK, { credentials: "include" });
@@ -68,6 +69,16 @@ form?.addEventListener("submit", async (e) => {
   setTimeout(() => location.href = "lote.html", 900);
 });
 
-// init
-await requireSession();
-await loadOptions();
+// ===== init =====
+try {
+  const user = await requireSession();
+  // ← PINTA el nombre en el chip (lo que faltaba)
+  if (usuarioBox) {
+    const nombreCompleto = `${user.nombre ?? ""} ${user.apellido ?? ""}`.trim();
+    usuarioBox.textContent = nombreCompleto || user.usuario || "Usuario";
+  }
+  await loadOptions();
+} catch (err) {
+  console.error("init error:", err);
+  location.href = "index.html";
+}
