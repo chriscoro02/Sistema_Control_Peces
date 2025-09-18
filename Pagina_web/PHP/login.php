@@ -100,7 +100,7 @@ try {
       'rol' => $u['rol_nombre'] ?? null
     ],
     // Cambia por tu destino real después del login
-    'redirect' => '/Pagina_web/HTML/dashboard.php'
+    'redirect' => '../../Pagina_web/HTML/dashboard.html'
   ]);
 } catch (Throwable $e) {
   http_response_code(500);
