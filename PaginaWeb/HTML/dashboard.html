@@ -5,30 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dashboard - Lagos Andinos SRL</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    :root { --sidebar-width: 260px; }
-    body { min-height: 100vh; background:#f8fafc; }
-    .sidebar {
-      width: var(--sidebar-width);
-      background: #0f172a; color: #fff; position: fixed; inset: 0 auto 0 0;
-      padding: 18px 12px; overflow-y:auto;
-    }
-    .sidebar h4 { font-size: 18px; margin-bottom: 10px; }
-    .sidebar a {
-      display:block; color:#cbd5e1; text-decoration:none; padding:10px 12px; border-radius:10px;
-    }
-    .sidebar a:hover { background:#1f2937; color:#fff; }
-    .content { margin-left: var(--sidebar-width); padding: 18px; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; }
-    .chip { background:#e2e8f0; color:#0f172a; padding:6px 10px; border-radius:999px; }
-    @media (max-width: 860px) {
-      :root { --sidebar-width: 0px; }
-      .sidebar { position:static; width:100%; border-bottom:1px solid #1f2937; }
-      .content { margin:0; }
-      .sidebar nav { display:flex; flex-wrap:wrap; gap:8px; }
-      .sidebar a { display:inline-block; }
-    }
-  </style>
+  <link rel="stylesheet" href="/CSS/style_dashboar.css">
 </head>
 <body>
   <aside class="sidebar">
@@ -36,15 +13,14 @@
     <nav>
       <a href="#">Barrera</a>
       <a href="/HTML/lote.html">Lote</a>
-      <a href="#">Cosecha</a>
-      <a href="#">Registro de alimentación</a>
-      <a href="#">Parámetro de agua</a>
-      <a href="#">Registro de venta</a>
+      <a href="/HTML/cosecha.html">Cosecha</a>
+      <a href="/HTML/alimentacion.html">Registro de alimentación</a>
+      <a href="/HTML/parametro_agua.html">Parámetro de agua</a>
+      <a href="/HTML/ventas.html">Registro de venta</a>
       <hr>
       <button id="btnLogout">Cerrar sesión</button>
     </nav>
   </aside>
-
   <main class="content">
     <div class="topbar">
       <h3 class="m-0">Panel principal</h3>
@@ -62,7 +38,6 @@
       </div>
     </div>
   </main>
-
   <script src="/JS/login.js"></script>
   <button id="btnLogout">Cerrar sesión</button>
 
@@ -70,8 +45,6 @@
   const API_BASE   = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/";
   const URL_CHECK  = API_BASE + "PHP/check_session.php";
   const URL_LOGOUT = API_BASE + "PHP/logout.php";
-
-  // Pinta lo que tengas en sessionStorage de inmediato (mejor UX)
   const cache = JSON.parse(sessionStorage.getItem("user") || "{}");
   const usuarioBox = document.getElementById("usuarioBox");
   if (usuarioBox && (cache.nombre || cache.usuario)) {
@@ -84,11 +57,9 @@
     let j;
     try { j = JSON.parse(raw); } catch { throw new Error("Respuesta no-JSON: " + raw.slice(0,200)); }
 
-    console.log("check_session >", j, "status:", r.status); // para depurar
+    console.log("check_session >", j, "status:", r.status); 
 
     if (!j.ok) { location.href = "index.html"; throw new Error("no-session"); }
-
-    // guarda y muestra
     sessionStorage.setItem("user", JSON.stringify(j));
     const nombreCompleto = `${j.nombre ?? ""} ${j.apellido ?? ""}`.trim();
     if (usuarioBox) usuarioBox.textContent = nombreCompleto || j.usuario || "Usuario";
@@ -98,19 +69,12 @@
     location.href = "index.html";
   }
 
-  // Logout
   document.getElementById("btnLogout")?.addEventListener("click", async () => {
     try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch {}
     sessionStorage.removeItem("user");
     location.href = "index.html";
   });
 </script>
-
-
-
-
-
-
 
 </body>
 </html>

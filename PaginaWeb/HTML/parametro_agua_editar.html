@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nuevo parámetro de agua</title>
+  <title>Modificar parámetro de agua</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/CSS/style_parametro_agua_nuevo.css">
+  <link rel="stylesheet" href="/CSS/style_parametro_agua_editar.css">
 </head>
 <body>
   <aside class="sidebar">
@@ -24,7 +24,7 @@
 
   <main class="content">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="m-0">Crear nuevo parámetro</h3>
+      <h3 class="m-0">Modificar parámetro de agua</h3>
       <div class="d-flex gap-2">
         <span id="usuarioBox" class="userchip">Cargando…</span>
         <a href="parametro_agua.html" class="btn btn-outline-secondary">← Volver</a>
@@ -32,60 +32,58 @@
     </div>
 
     <form id="frmParam" class="card shadow-sm">
+      <input type="hidden" id="id_parametro" name="id_parametro">
       <div class="card-body row g-3">
         <div class="col-md-4">
           <label class="form-label">Estanque *</label>
           <select required id="selEstanque" name="id_estanque" class="form-select"></select>
         </div>
         <div class="col-md-4">
-          <label class="form-label">Fecha y hora *</label>
-          <input required type="datetime-local" id="inpFecha" name="fecha" class="form-control"/>
+          <label class="form-label">Fecha *</label>
+          <input required type="datetime-local" id="fecha" name="fecha" class="form-control">
         </div>
-
         <div class="col-md-4">
           <label class="form-label">Temperatura (°C)</label>
-          <input type="number" step="0.01" name="temperatura" class="form-control" />
+          <input type="number" step="0.01" id="temperatura" name="temperatura" class="form-control">
         </div>
         <div class="col-md-4">
           <label class="form-label">pH</label>
-          <input type="number" step="0.01" name="ph" class="form-control" />
+          <input type="number" step="0.01" id="ph" name="ph" class="form-control">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Oxígeno (mg/L)</label>
-          <input type="number" step="0.01" name="oxigeno" class="form-control" />
+          <label class="form-label">Oxígeno O₂ (mg/L)</label>
+          <input type="number" step="0.01" id="oxigeno" name="oxigeno" class="form-control">
         </div>
         <div class="col-md-4">
           <label class="form-label">Amonio NH₃ (mg/L)</label>
-          <input type="number" step="0.001" name="amonio" class="form-control" />
+          <input type="number" step="0.001" id="amonio" name="amonio" class="form-control">
         </div>
         <div class="col-md-4">
           <label class="form-label">Nitritos NO₂ (mg/L)</label>
-          <input type="number" step="0.001" name="nitritos" class="form-control" />
+          <input type="number" step="0.01" id="nitritos" name="nitritos" class="form-control">
         </div>
         <div class="col-md-4">
           <label class="form-label">Turbidez (NTU)</label>
-          <input type="number" step="0.01" name="turbidez" class="form-control" />
+          <input type="number" step="0.01" id="turbidez" name="turbidez" class="form-control">
         </div>
-
-        <div class="col-12">
+        <div class="col-md-12">
           <label class="form-label">Observación</label>
-          <input name="observacion" class="form-control" maxlength="255" />
+          <input id="observacion" name="observacion" class="form-control" maxlength="255">
         </div>
-
         <div class="col-12">
           <div id="msg" class="alert d-none"></div>
-          <button class="btn btn-primary">Guardar</button>
+          <button class="btn btn-primary">Guardar cambios</button>
         </div>
       </div>
     </form>
   </main>
 
-  <script type="module" src="/JS/parametro_agua_nuevo.js"></script>
+  <script type="module" src="/JS/parametro_agua_editar.js"></script>
   <script>
     const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
     document.getElementById("btnLogout")?.addEventListener("click", async () => {
       try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch {}
-      sessionStorage.removeItem("user"); location.href="index.html";
+      sessionStorage.removeItem("user"); location.href = "index.html";
     });
   </script>
 </body>

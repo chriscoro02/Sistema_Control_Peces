@@ -23,18 +23,18 @@ async function loadLotes() {
   const term = q.value.trim();
   if (term) params.set("q", term);
 
-  tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">Cargando…</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4">Cargando…</td></tr>`;
 
   const r = await fetch(`${URL_LIST}?${params}`, { credentials: "include" });
   const j = await r.json();
 
   if (!j.ok) {
-    tbody.innerHTML = `<tr><td colspan="8" class="text-danger">Error: ${j.msg || "no se pudo obtener los lotes"}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="text-danger">Error: ${j.msg || "no se pudo obtener los lotes"}</td></tr>`;
     return;
   }
 
   if (!j.data.length) {
-    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">Sin resultados</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">Sin resultados</td></tr>`;
     return;
   }
 
@@ -48,6 +48,12 @@ async function loadLotes() {
       <td>${row.fecha_siembra}</td>
       <td>${row.cantidad_inicial}</td>
       <td>${row.origen || "-"}</td>
+      <td>
+        <a class="btn btn-sm btn-outline-primary"
+           href="lote_editar.html?id=${row.id_lote}">
+          Modificar
+        </a>
+      </td>
     </tr>
   `).join("");
 }
