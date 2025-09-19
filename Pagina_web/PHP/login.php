@@ -5,7 +5,7 @@ session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 // >>> Config DB (tu hosting)
-$host = 'localhost';
+$host = 'srv804.hstgr.io';
 $dbname = 'u315648687_piscicola';
 $username = 'u315648687_Admin';
 $password = 'Sistema_Gestion25';
@@ -100,7 +100,7 @@ try {
       'rol' => $u['rol_nombre'] ?? null
     ],
     // Cambia por tu destino real después del login
-    'redirect' => '/Pagina_web/HTML/dashboard.php'
+    'redirect' => '../../Pagina_web/HTML/dashboard.html'
   ]);
 } catch (Throwable $e) {
   http_response_code(500);

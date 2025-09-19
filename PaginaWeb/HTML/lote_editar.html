@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Modificar lote</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../CSS/style_lote_editar.css">
+
+</head>
+<body>
+  <aside class="sidebar">
+    <h5>Administrador</h5>
+    <nav>
+      <a href="dashboard.html">Barrera</a>
+      <a href="lote.html" class="active">Lote</a>
+      <a href="cosechas.html">Cosecha</a>
+      <a href="alimentacion.html">Registro de alimentación</a>
+      <a href="parametro_agua.html">Parámetro de agua</a>
+      <a href="ventas.html">Registro de venta</a>
+      <hr>
+      <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="m-0">Modificar lote</h3>
+      <div class="d-flex gap-2">
+        <span id="usuarioBox" class="userchip">Cargando…</span>
+        <a href="lote.html" class="btn btn-outline-secondary">← Volver</a>
+      </div>
+    </div>
+
+    <form id="frmLote" class="card shadow-sm">
+      <input type="hidden" id="id_lote" name="id_lote" />
+      <div class="card-body row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Código de lote *</label>
+          <input required name="codigo_lote" id="codigo_lote" class="form-control" maxlength="30" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Estanque *</label>
+          <select required name="id_estanque" id="selEstanque" class="form-select"></select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Especie *</label>
+          <select required name="id_especie" id="selEspecie" class="form-select"></select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Proveedor (opcional)</label>
+          <select name="id_proveedor" id="selProveedor" class="form-select"></select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Fecha siembra *</label>
+          <input required type="date" name="fecha_siembra" id="fecha_siembra" class="form-control" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Cantidad inicial *</label>
+          <input required type="number" min="1" step="1" name="cantidad_inicial" id="cantidad_inicial" class="form-control" />
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">Origen (opcional)</label>
+          <input name="origen" id="origen" class="form-control" maxlength="80" />
+        </div>
+        <div class="col-12">
+          <div id="msg" class="alert d-none"></div>
+          <button class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <script type="module" src="../JS/lote_editar.js"></script>
+  <script>
+    const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
+    document.getElementById("btnLogout")?.addEventListener("click", async () => {
+      try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch {}
+      sessionStorage.removeItem("user"); location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

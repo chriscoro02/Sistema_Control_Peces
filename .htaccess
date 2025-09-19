@@ -1,0 +1,5 @@
+# Pasa las variables de entorno directamente a Apache
+SetEnv DB_HOST srv804.hstgr.io
+SetEnv DB_DATABASE u315648687_piscicola
+SetEnv DB_USER u315648687_Admin
+SetEnv DB_PASSWORD Sistema_Gestion25
