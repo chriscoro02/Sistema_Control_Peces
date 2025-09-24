@@ -1,7 +1,7 @@
 // JS/parametro_agua_editar.js
 const API_BASE   = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/";
 const URL_CHECK  = API_BASE + "PHP/check_session.php";
-const URL_OPTS   = API_BASE + "PHP/parametro_options.php"; // devuelve estanques
+const URL_OPTS   = API_BASE + "PHP/parametro_options.php";
 const URL_GET    = API_BASE + "PHP/parametro_get.php?id=";
 const URL_UPDATE = API_BASE + "PHP/parametro_update.php";
 
@@ -59,6 +59,7 @@ async function loadParam(){
   $("#amonio").value       = j.data.amonio ?? "";
   $("#nitritos").value     = j.data.nitritos ?? "";
   $("#turbidez").value     = j.data.turbidez ?? "";
+  $("#tipo").value         = j.data.tipo ?? "";
   $("#observacion").value  = j.data.observacion ?? "";
 }
 
@@ -67,6 +68,12 @@ form?.addEventListener("submit", async (e)=>{
   msg.classList.add("d-none");
 
   const fd = new FormData(form);
+  // vacíos => NULL (solo para opcionales)
+  ["temperatura","ph","oxigeno","amonio","nitritos","turbidez","observacion","tipo"].forEach(k=>{
+    const v = (fd.get(k)||"").toString().trim();
+    if(v==="") fd.delete(k);
+  });
+
   const res = await fetch(URL_UPDATE, { method:"POST", body:fd, credentials:"include" });
   const txt = await res.text();
   let j; try{ j = JSON.parse(txt); } catch { showMsg("danger","Respuesta no válida: "+txt); return; }
