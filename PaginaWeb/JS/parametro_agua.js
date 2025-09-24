@@ -53,6 +53,7 @@ async function loadData(){
       <td>${fmt(row.nitritos,2)}</td>
       <td>${fmt(row.turbidez,2)}</td>
       <td>${row.observacion || ""}</td>
+      <td>${row.tipo || ""}</td>
       <td>
         <a class="btn btn-sm btn-outline-primary"
            href="parametro_agua_editar.html?id=${row.id_parametro}">

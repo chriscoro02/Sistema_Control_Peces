@@ -40,8 +40,8 @@ form?.addEventListener("submit", async (e)=>{
   msg.classList.add("d-none");
 
   const fd = new FormData(form);
-  // Si algún numérico viene vacío => eliminar para que sea NULL
-  ["temperatura","ph","oxigeno","amonio","nitritos","turbidez","observacion"].forEach(k=>{
+  // vacíos => NULL
+  ["temperatura","ph","oxigeno","amonio","nitritos","turbidez","observacion","tipo"].forEach(k=>{
     const v = (fd.get(k)||"").toString().trim();
     if(v==="") fd.delete(k);
   });
