@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Nuevo lote</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-   <link rel="stylesheet" href="../CSS/style_lote_nuevo.css">
+  <link rel="stylesheet" href="../CSS/style_lote.css">
 </head>
 <body>
   <aside class="sidebar">
@@ -45,6 +45,11 @@
           <label class="form-label">Especie *</label>
           <select required name="id_especie" id="selEspecie" class="form-select"></select>
         </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Fase de Crianza *</label>
+          <select required name="id_fase_crianza" id="selFase" class="form-select"></select>
+        </div>
         <div class="col-md-4">
           <label class="form-label">Proveedor (opcional)</label>
           <select name="id_proveedor" id="selProveedor" class="form-select"></select>
@@ -53,13 +58,14 @@
           <label class="form-label">Fecha siembra *</label>
           <input required type="date" name="fecha_siembra" class="form-control" />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label class="form-label">Cantidad inicial *</label>
           <input required type="number" min="1" step="1" name="cantidad_inicial" class="form-control" />
         </div>
+
         <div class="col-12">
-          <label class="form-label">Origen (opcional)</label>
-          <input name="origen" class="form-control" maxlength="80" />
+            <label class="form-label">Observación (opcional)</label>
+            <textarea name="observacion" class="form-control" maxlength="255" rows="3"></textarea>
         </div>
         <div class="col-12">
           <div id="msg" class="alert d-none"></div>
