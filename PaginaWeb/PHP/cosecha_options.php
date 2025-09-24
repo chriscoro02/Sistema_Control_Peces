@@ -11,7 +11,7 @@ if (!isset($_SESSION['id_usuario'])) {
     exit; 
 }
 
-$lotes     = $cn->query("SELECT id_lote, codigo_lote FROM lote ORDER BY codigo_lote")->fetch_all(MYSQLI_ASSOC);
+$lotes     = $cn->query("SELECT lote.id_lote, lote.codigo_lote FROM lote LEFT JOIN cosecha ON cosecha.id_lote = lote.id_lote WHERE cosecha.id_lote IS NULL ORDER BY lote.codigo_lote")->fetch_all(MYSQLI_ASSOC);
 $calidades = $cn->query("SELECT id_calidad, clase FROM clasificacion_calidad ORDER BY id_calidad")->fetch_all(MYSQLI_ASSOC);
 $pesos     = $cn->query("SELECT id_peso, categoria FROM clasificacion_peso ORDER BY id_peso")->fetch_all(MYSQLI_ASSOC);
 
