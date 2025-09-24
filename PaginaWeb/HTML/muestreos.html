@@ -45,13 +45,14 @@
                                 <th>Nº Muestreado</th>
                                 <th>Peso Prom. (kg)</th>
                                 <th>Talla Prom. (cm)</th>
-                                <th>Comportamiento</th>
+                                <th>Biomasa (kg)</th>
+                                <th>Conversión Alim.</th>
                                 <th>Registrado por</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyMuestreos">
                             <tr>
-                                <td colspan="7" class="text-center text-muted py-4">Cargando…</td>
+                                <td colspan="8" class="text-center text-muted py-4">Cargando…</td>
                             </tr>
                         </tbody>
                     </table>
@@ -62,7 +63,6 @@
 
     <script type="module" src="../JS/muestreos.js"></script>
     <script>
-        // Script de logout (sin cambios)
         const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
         document.getElementById("btnLogout")?.addEventListener("click", async () => {
             try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch { }

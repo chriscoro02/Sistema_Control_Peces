@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nuevo Muestreo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/style_lote.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <h5>Administrador</h5>
+        <nav>
+            <a href="dashboard.html">Barrera</a>
+            <a href="lote.html" class="active">Lote</a>
+            <a href="cosechas.html">Cosecha</a>
+            <a href="alimentacion.html">Registro de alimentación</a>
+            <a href="parametro_agua.html">Parámetro de agua</a>
+            <a href="ventas.html">Registro de venta</a>
+            <hr>
+            <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+        </nav>
+    </aside>
+
+    <main class="content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="m-0">Registrar Nuevo Muestreo</h3>
+            <div class="d-flex gap-2">
+                <span id="usuarioBox" class="userchip">Cargando…</span>
+                <a id="btnVolver" href="lote.html" class="btn btn-outline-secondary">← Volver</a>
+            </div>
+        </div>
+
+        <form id="frmMuestreo" class="card shadow-sm">
+            <div class="card-body row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Fecha y Hora *</label>
+                    <input required type="datetime-local" name="fecha" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Número de Peces Muestreados</label>
+                    <input type="number" min="1" step="1" name="numero_muestreado" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Peso Promedio (kg)</label>
+                    <input type="number" step="0.001" name="peso_promedio" class="form-control"
+                        placeholder="Ej: 0.125" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Talla Promedio (cm)</label>
+                    <input type="number" step="0.01" name="talla_promedio" class="form-control"
+                        placeholder="Ej: 15.5" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Biomasa (kg)</label>
+                    <input type="number" step="0.01" name="biomasa" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Conversión Alimenticia</label>
+                    <input type="number" step="0.01" name="conversion_alimenticia" class="form-control" />
+                </div>
+                <div class="col-12">
+                    <div id="msg" class="alert d-none"></div>
+                    <button class="btn btn-primary">Guardar Muestreo</button>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script type="module" src="../JS/muestreo_nuevo.js"></script>
+    <script>
+        const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
+        document.getElementById("btnLogout")?.addEventListener("click", async () => {
+            try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch { }
+            sessionStorage.removeItem("user");
+            location.href = "index.html";
+        });
+    </script>
+</body>
+
+</html>
