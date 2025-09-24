@@ -15,6 +15,22 @@ async function requireSession() {
   return j;
 }
 
+function fmtFecha(s){
+  if (!s) return "-";
+  // s viene "YYYY-MM-DD HH:MM:SS"
+  const iso = s.replace(" ", "T");
+  const d = new Date(iso);
+  if (isNaN(d)) return s;
+  return d.toLocaleString("es-ES");
+}
+
+function fmtNum(x, d=2){
+  if (x === null || x === undefined || x === "") return "-";
+  const n = Number(x);
+  if (isNaN(n)) return "-";
+  return n.toFixed(d);
+}
+
 async function loadVentas() {
   tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">Cargando…</td></tr>`;
 
@@ -26,26 +42,26 @@ async function loadVentas() {
     return;
   }
 
-  if (!j.data.length) {
+  if (!j.data?.length) {
     tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">Sin resultados</td></tr>`;
     return;
   }
 
   tbody.innerHTML = j.data.map(row => `
     <tr>
-      <td>${row.id_registro_venta}</td>
-      <td>${new Date(row.fecha_salida).toLocaleString('es-ES')}</td>
+      <td>${row.id_registroventa}</td>
+      <td>${fmtFecha(row.fecha_venta)}</td>
       <td><strong>Cosecha #${row.id_cosecha} (${row.codigo_lote})</strong></td>
       <td>${row.destino_tipo || "-"}</td>
-      <td>${row.estado || "-"}</td>
-      <td>${row.temperatura_transporte ? parseFloat(row.temperatura_transporte).toFixed(2) + ' °C' : "-"}</td>
+      <td>${row.presentacion || "-"}</td>
+      <td>${row.temperatura_transporte ? fmtNum(row.temperatura_transporte, 2) + " °C" : "-"}</td>
       <td>${row.registrado_por_nombre || "-"}</td>
-      <td>${row.observacion || "-"}</td> 
+      <td>${row.observacion || "-"}</td>
     </tr>
   `).join("");
 }
 
 (async () => {
-    await requireSession();
-    await loadVentas();
+  await requireSession();
+  await loadVentas();
 })();

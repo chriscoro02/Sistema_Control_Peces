@@ -42,15 +42,24 @@ function showMsg(type, text) {
 }
 
 function setNow() {
-    const now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    form.fecha_salida.value = now.toISOString().slice(0, 16);
+  // set default datetime-local = ahora (sin segundos)
+  const inp = form.querySelector('input[name="fecha_venta"]');
+  if (!inp) return;
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  inp.value = d.toISOString().slice(0,16);
 }
 
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
   msg.classList.add("d-none");
   const fd = new FormData(form);
+
+  // Normaliza opcionales vacíos
+  ["presentacion","temperatura_transporte","observacion"].forEach(k=>{
+    const v = (fd.get(k)||"").toString().trim();
+    if (v === "") fd.delete(k);
+  });
 
   const res = await fetch(URL_CREATE, { method: "POST", body: fd, credentials: "include" });
   const txt = await res.text();
