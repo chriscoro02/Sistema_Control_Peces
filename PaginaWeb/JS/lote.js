@@ -13,7 +13,26 @@ async function requireSession() {
   const j = await r.json();
   if (!j.ok) { location.href = "index.html"; throw new Error("no-session"); }
   usuarioBox.textContent = `${j.nombre ?? ""} ${j.apellido ?? ""}`.trim() || j.usuario || "Usuario";
-  return j;
+}
+
+// Función para generar los botones condicionalmente
+function renderizarBotones(lote) {
+    if (lote.estado === 'ACTIVO') {
+        return `
+            <div class="d-flex gap-1">
+              <a class="btn btn-sm btn-secondary"
+                 href="lote_editar.html?id=${lote.id_lote}">
+                Editar
+              </a>
+              <a class="btn btn-sm btn-info text-white"
+                 href="muestreos.html?id_lote=${lote.id_lote}">
+                Muestreo
+              </a>
+            </div>
+        `;
+    } else {
+        return `<span class="badge bg-success">Cosechado</span>`;
+    }
 }
 
 async function loadLotes() {
@@ -41,23 +60,14 @@ async function loadLotes() {
       <td>${row.id_lote}</td>
       <td><strong>${row.codigo_lote}</strong></td>
       <td>${row.estanque || "-"}</td>
-      <td>${row.especie || "-"}</td>
+      <td>${row.especie || "-"}}</td>
       <td>${row.fase_crianza_nombre || "-"}</td>
       <td>${row.proveedor || "-"}</td>
       <td>${row.fecha_siembra}</td>
       <td>${row.cantidad_inicial}</td>
       <td>${row.observacion || "-"}</td>
       <td>
-        <div class="d-flex gap-1">
-          <a class="btn btn-sm btn-secondary"
-             href="lote_editar.html?id=${row.id_lote}">
-            Editar
-          </a>
-          <a class="btn btn-sm btn-info text-white"
-             href="muestreos.html?id_lote=${row.id_lote}">
-            Muestreo
-          </a>
-        </div>
+        ${renderizarBotones(row)}
       </td>
     </tr>
   `).join("");
@@ -74,5 +84,3 @@ q?.addEventListener("keydown", (e) => { if (e.key === "Enter") loadLotes(); });
         console.error("Error en la inicialización:", err);
     }
 })();
-
-// Logout (El script de logout que tenías antes no necesita estar aquí, ya que está en el HTML)
