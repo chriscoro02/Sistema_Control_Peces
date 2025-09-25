@@ -1,86 +1,267 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Editar Lote</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../CSS/style_lote.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Editar Lote - Lagos Andinos SRL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../CSS/style_lote_editar.css">
 </head>
 <body>
-  <aside class="sidebar">
-    <h5>Administrador</h5>
-    <nav>
-      <a href="dashboard.html">Barrera</a>
-      <a href="lote.html" class="active">Lote</a>
-      <a href="cosechas.html">Cosecha</a>
-      <a href="alimentacion.html">Registro de alimentación</a>
-      <a href="parametro_agua.html">Parámetro de agua</a>
-      <a href="ventas.html">Registro de venta</a>
-      <hr>
-      <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
-    </nav>
-  </aside>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="bi bi-water"></i>
+                <h4>Lagos Andinos</h4>
+            </div>
+            <div class="role-badge">
+                <i class="bi bi-person-gear"></i>
+                <span>Administrador</span>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="bi bi-speedometer2"></i>
+                <span>Panel principal</span>
+            </a>
+            <a href="lote.html" class="nav-item active">
+                <i class="bi bi-collection"></i>
+                <span>Lote</span>
+            </a>
+            <a href="cosechas.html" class="nav-item">
+                <i class="bi bi-basket"></i>
+                <span>Cosecha</span>
+            </a>
+            <a href="alimentacion.html" class="nav-item">
+                <i class="bi bi-clipboard-data"></i>
+                <span>Registro de alimentación</span>
+            </a>
+            <a href="parametro_agua.html" class="nav-item">
+                <i class="bi bi-droplet"></i>
+                <span>Parámetro de agua</span>
+            </a>
+            <a href="ventas.html" class="nav-item">
+                <i class="bi bi-cart-check"></i>
+                <span>Registro de venta</span>
+            </a>
+            
+            <div class="nav-divider"></div>
+            
+            <button id="btnLogout" class="nav-item logout-btn">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Cerrar sesión</span>
+            </button>
+        </nav>
+    </aside>
 
-  <main class="content">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="m-0">Editar Lote</h3>
-      <div class="d-flex gap-2">
-        <span id="usuarioBox" class="userchip">Cargando…</span>
-        <a href="lote.html" class="btn btn-outline-secondary">← Volver</a>
-      </div>
-    </div>
+    <main class="content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle d-lg-none" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h3 class="page-title">Editar Lote</h3>
+            </div>
+            <div class="topbar-right">
+                <a href="lote.html" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Volver
+                </a>
+                <div id="usuarioBox" class="user-chip">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Cargando…</span>
+                </div>
+            </div>
+        </div>
 
-    <form id="frmLote" class="card shadow-sm">
-      <div class="card-body row g-3">
-        <div class="col-md-4">
-          <label class="form-label">Código de lote *</label>
-          <input required name="codigo_lote" class="form-control" maxlength="30" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Estanque *</label>
-          <select required name="id_estanque" id="selEstanque" class="form-select"></select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Especie *</label>
-          <select required name="id_especie" id="selEspecie" class="form-select"></select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Fase de Crianza *</label>
-          <select required name="id_fase_crianza" id="selFase" class="form-select"></select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Proveedor (opcional)</label>
-          <select name="id_proveedor" id="selProveedor" class="form-select"></select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Fecha siembra *</label>
-          <input required type="date" name="fecha_siembra" class="form-control" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Cantidad inicial *</label>
-          <input required type="number" min="1" step="1" name="cantidad_inicial" class="form-control" />
-        </div>
-        <div class="col-12">
-            <label class="form-label">Observación (opcional)</label>
-            <textarea name="observacion" class="form-control" maxlength="255" rows="3"></textarea>
-        </div>
-        <div class="col-12">
-          <div id="msg" class="alert d-none"></div>
-          <button class="btn btn-primary">Guardar Cambios</button>
-        </div>
-      </div>
-    </form>
-  </main>
+        <div class="content-body">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10 col-xl-8">
+                    <form id="frmLote" class="form-card">
+                        <div class="form-header">
+                            <div class="form-title">
+                                <i class="bi bi-pencil-square me-2"></i>
+                                Editar Información del Lote
+                            </div>
+                            <div class="form-subtitle">
+                                Modifique los campos necesarios y guarde los cambios
+                            </div>
+                        </div>
+                        
+                        <div class="form-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-tag me-2"></i>
+                                            Código de lote
+                                            <span class="required">*</span>
+                                        </label>
+                                        <input 
+                                            required 
+                                            name="codigo_lote" 
+                                            class="form-control" 
+                                            maxlength="30"
+                                            placeholder="Ej: LOTE001"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-building me-2"></i>
+                                            Estanque
+                                            <span class="required">*</span>
+                                        </label>
+                                        <select required name="id_estanque" id="selEstanque" class="form-select">
+                                            <option value="">Cargando estanques...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-fish me-2"></i>
+                                            Especie
+                                            <span class="required">*</span>
+                                        </label>
+                                        <select required name="id_especie" id="selEspecie" class="form-select">
+                                            <option value="">Cargando especies...</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-  <script type="module" src="../JS/lote_editar.js"></script>
-  <script>
-    const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
-    document.getElementById("btnLogout")?.addEventListener("click", async () => {
-      try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch {}
-      sessionStorage.removeItem("user");
-      location.href = "index.html";
-    });
-  </script>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-diagram-3 me-2"></i>
+                                            Fase de Crianza
+                                            <span class="required">*</span>
+                                        </label>
+                                        <select required name="id_fase_crianza" id="selFase" class="form-select">
+                                            <option value="">Cargando fases...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-truck me-2"></i>
+                                            Proveedor
+                                            <span class="optional">(opcional)</span>
+                                        </label>
+                                        <select name="id_proveedor" id="selProveedor" class="form-select">
+                                            <option value="">Cargando proveedores...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-calendar-event me-2"></i>
+                                            Fecha de siembra
+                                            <span class="required">*</span>
+                                        </label>
+                                        <input 
+                                            required 
+                                            type="date" 
+                                            name="fecha_siembra" 
+                                            class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-123 me-2"></i>
+                                            Cantidad inicial
+                                            <span class="required">*</span>
+                                        </label>
+                                        <input 
+                                            required 
+                                            type="number" 
+                                            min="1" 
+                                            step="1" 
+                                            name="cantidad_inicial" 
+                                            class="form-control"
+                                            placeholder="Número de peces"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="bi bi-chat-text me-2"></i>
+                                            Observación
+                                            <span class="optional">(opcional)</span>
+                                        </label>
+                                        <textarea 
+                                            name="observacion" 
+                                            class="form-control" 
+                                            maxlength="255" 
+                                            rows="3"
+                                            placeholder="Observaciones adicionales sobre el lote..."
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <div id="msg" class="alert d-none"></div>
+                            <div class="form-actions">
+                                <button type="button" onclick="location.href='lote.html'" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-lg me-2"></i>
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-2"></i>
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Scripts originales sin modificaciones -->
+    <script type="module" src="../JS/lote_editar.js"></script>
+    <script>
+        const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
+        document.getElementById("btnLogout")?.addEventListener("click", async () => {
+            try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch {}
+            sessionStorage.removeItem("user");
+            location.href = "index.html";
+        });
+
+        // Toggle sidebar en móviles
+        document.getElementById("sidebarToggle")?.addEventListener("click", () => {
+            document.body.classList.toggle("sidebar-open");
+        });
+
+        // Cerrar sidebar al hacer clic fuera en móviles
+        document.addEventListener("click", (e) => {
+            if (window.innerWidth < 992) {
+                const sidebar = document.querySelector(".sidebar");
+                const toggle = document.getElementById("sidebarToggle");
+                if (!sidebar?.contains(e.target) && !toggle?.contains(e.target)) {
+                    document.body.classList.remove("sidebar-open");
+                }
+            }
+        });
+    </script>
 </body>
 </html>

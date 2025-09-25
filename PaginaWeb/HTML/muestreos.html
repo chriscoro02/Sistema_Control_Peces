@@ -1,66 +1,162 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Muestreos de Lote</title>
+    <title>Muestreos de Lote - Lagos Andinos SRL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/style_lote.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../CSS/style_muestreos.css">
 </head>
-
 <body>
     <aside class="sidebar">
-        <h5>Administrador</h5>
-        <nav>
-            <a href="dashboard.html">Barrera</a>
-            <a href="lote.html" class="active">Lote</a>
-            <a href="cosechas.html">Cosecha</a>
-            <a href="alimentacion.html">Registro de alimentación</a>
-            <a href="parametro_agua.html">Parámetro de agua</a>
-            <a href="ventas.html">Registro de venta</a>
-            <hr>
-            <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="bi bi-water"></i>
+                <h4>Lagos Andinos</h4>
+            </div>
+            <div class="role-badge">
+                <i class="bi bi-person-gear"></i>
+                <span>Administrador</span>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="bi bi-speedometer2"></i>
+                <span>Panel principal</span>
+            </a>
+            <a href="lote.html" class="nav-item active">
+                <i class="bi bi-collection"></i>
+                <span>Lote</span>
+            </a>
+            <a href="cosechas.html" class="nav-item">
+                <i class="bi bi-basket"></i>
+                <span>Cosecha</span>
+            </a>
+            <a href="alimentacion.html" class="nav-item">
+                <i class="bi bi-clipboard-data"></i>
+                <span>Registro de alimentación</span>
+            </a>
+            <a href="parametro_agua.html" class="nav-item">
+                <i class="bi bi-droplet"></i>
+                <span>Parámetro de agua</span>
+            </a>
+            <a href="ventas.html" class="nav-item">
+                <i class="bi bi-cart-check"></i>
+                <span>Registro de venta</span>
+            </a>
+            
+            <div class="nav-divider"></div>
+            
+            <button id="btnLogout" class="nav-item logout-btn">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Cerrar sesión</span>
+            </button>
         </nav>
     </aside>
 
     <main class="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="m-0">Muestreos del Lote: <span id="codigoLoteBox" class="text-primary">Cargando...</span></h3>
-            <div class="d-flex gap-2">
-                <span id="usuarioBox" class="userchip">Cargando…</span>
-                <a href="lote.html" class="btn btn-outline-secondary">← Volver a Lotes</a>
-                <a id="btnNuevoMuestreo" href="#" class="btn btn-primary">+ Nuevo Muestreo</a>
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle d-lg-none" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="page-title-group">
+                    <h3 class="page-title">Muestreos del Lote:</h3>
+                    <span id="codigoLoteBox" class="lote-code">Cargando...</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="lote.html" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Volver a Lotes
+                </a>
+                <a id="btnNuevoMuestreo" href="#" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-2"></i>
+                    Nuevo Muestreo
+                </a>
+                <div id="usuarioBox" class="user-chip">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Cargando…</span>
+                </div>
             </div>
         </div>
 
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-sm align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Fecha</th>
-                                <th>Nº Muestreado</th>
-                                <th>Peso Prom. (kg)</th>
-                                <th>Talla Prom. (cm)</th>
-                                <th>Biomasa (kg)</th>
-                                <th>Conversión Alim.</th>
-                                <th>Registrado por</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyMuestreos">
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-4">Cargando…</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="content-body">
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-graph-up me-2 text-primary"></i>
+                                <h5 class="card-title mb-0">Historial de Muestreos</h5>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>
+                                                <i class="bi bi-hash me-1"></i>
+                                                ID
+                                            </th>
+                                            <th>
+                                                <i class="bi bi-calendar-event me-1"></i>
+                                                Fecha
+                                            </th>
+                                            <th>
+                                                <i class="bi bi-123 me-1"></i>
+                                                Nº Muestreado
+                                            </th>
+                                            <th>
+                                                <i class="bi bi-weight me-1"></i>
+                                                Peso Prom. (kg)
+                                            </th>
+                                            <th>
+                                                <i class="bi bi-rulers me-1"></i>
+                                                Talla Prom. (cm)
+                                            </th>
+                                            <th>
+                                                <i class="bi bi-graph-up-arrow me-1"></i>
+                                                Biomasa (kg)
+                                            </th>
+                                            <th>
+                                                <i class="bi bi-arrow-repeat me-1"></i>
+                                                Conversión Alim.
+                                            </th>
+                                            <th>
+                                                <i class="bi bi-person me-1"></i>
+                                                Registrado por
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyMuestreos">
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted py-4">
+                                                <div class="loading-content">
+                                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                                        <span class="visually-hidden">Cargando...</span>
+                                                    </div>
+                                                    <span>Cargando datos...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Scripts originales sin modificaciones -->
     <script type="module" src="../JS/muestreos.js"></script>
     <script>
         const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
@@ -69,7 +165,22 @@
             sessionStorage.removeItem("user");
             location.href = "index.html";
         });
+
+        // Toggle sidebar en móviles
+        document.getElementById("sidebarToggle")?.addEventListener("click", () => {
+            document.body.classList.toggle("sidebar-open");
+        });
+
+        // Cerrar sidebar al hacer clic fuera en móviles
+        document.addEventListener("click", (e) => {
+            if (window.innerWidth < 992) {
+                const sidebar = document.querySelector(".sidebar");
+                const toggle = document.getElementById("sidebarToggle");
+                if (!sidebar?.contains(e.target) && !toggle?.contains(e.target)) {
+                    document.body.classList.remove("sidebar-open");
+                }
+            }
+        });
     </script>
 </body>
-
 </html>
