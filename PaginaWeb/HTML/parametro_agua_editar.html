@@ -5,89 +5,186 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Modificar parámetro de agua</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
   <link rel="stylesheet" href="../CSS/style_parametro_agua_editar.css">
 </head>
 <body>
+  <!-- Sidebar -->
   <aside class="sidebar">
-    <h5>Administrador</h5>
-    <nav>
-      <a href="dashboard.html">Panel principal</a>
-      <a href="lote.html">Lote</a>
-      <a href="cosechas.html">Cosecha</a>
-      <a href="alimentacion.html">Registro de alimentación</a>
-      <a href="parametro_agua.html" class="active">Parámetro de agua</a>
-      <a href="ventas.html">Registro de venta</a>
-      <hr>
-      <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
-    </nav>
-  </aside>
-
-  <main class="content">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="m-0">Modificar parámetro de agua</h3>
-      <div class="d-flex gap-2">
-        <span id="usuarioBox" class="userchip">Cargando…</span>
-        <a href="parametro_agua.html" class="btn btn-outline-secondary">← Volver</a>
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="bi bi-water"></i>
+        <h4>Lagos Andinos</h4>
+      </div>
+      <div class="role-badge">
+        <i class="bi bi-person-gear"></i>
+        <span>Administrador</span>
       </div>
     </div>
 
-    <form id="frmParam" class="card shadow-sm">
-      <input type="hidden" id="id_parametro" name="id_parametro">
-      <div class="card-body row g-3">
-        <div class="col-md-4">
-          <label class="form-label">Estanque *</label>
-          <select required id="selEstanque" name="id_estanque" class="form-select"></select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Fecha *</label>
-          <input required type="datetime-local" id="fecha" name="fecha" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Temperatura (°C)</label>
-          <input type="number" step="0.01" id="temperatura" name="temperatura" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">pH</label>
-          <input type="number" step="0.01" id="ph" name="ph" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Oxígeno O₂ (mg/L)</label>
-          <input type="number" step="0.01" id="oxigeno" name="oxigeno" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Amonio NH₃ (mg/L)</label>
-          <input type="number" step="0.001" id="amonio" name="amonio" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Nitritos NO₂ (mg/L)</label>
-          <input type="number" step="0.001" id="nitritos" name="nitritos" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Turbidez (NTU)</label>
-          <input type="number" step="0.01" id="turbidez" name="turbidez" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Tipo</label>
-          <input type="text" id="tipo" name="tipo" maxlength="50" class="form-control" placeholder="Ej: rutina, alerta, semanal">
-        </div>
-        <div class="col-md-12">
-          <label class="form-label">Observación</label>
-          <input id="observacion" name="observacion" class="form-control" maxlength="255">
-        </div>
-        <div class="col-12">
-          <div id="msg" class="alert d-none"></div>
-          <button class="btn btn-primary">Guardar cambios</button>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="bi bi-speedometer2"></i><span>Panel principal</span>
+      </a>
+      <a href="lote.html" class="nav-item">
+        <i class="bi bi-collection"></i><span>Lote</span>
+      </a>
+      <a href="cosechas.html" class="nav-item">
+        <i class="bi bi-basket"></i><span>Cosecha</span>
+      </a>
+      <a href="alimentacion.html" class="nav-item">
+        <i class="bi bi-clipboard-data"></i><span>Registro de alimentación</span>
+      </a>
+      <a href="parametro_agua.html" class="nav-item active">
+        <i class="bi bi-droplet"></i><span>Parámetro de agua</span>
+      </a>
+      <a href="ventas.html" class="nav-item">
+        <i class="bi bi-cart-check"></i><span>Registro de venta</span>
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <button id="btnLogout" class="nav-item logout-btn">
+        <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle d-lg-none" id="sidebarToggle">
+          <i class="bi bi-list"></i>
+        </button>
+        <h3 class="page-title">Modificar parámetro de agua</h3>
+      </div>
+      <div class="topbar-right">
+        <a href="parametro_agua.html" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </a>
+        <div id="usuarioBox" class="user-chip">
+          <i class="bi bi-person-circle"></i>
+          <span>Cargando…</span>
         </div>
       </div>
-    </form>
+    </div>
+
+    <!-- Body -->
+    <div class="content-body">
+      <form id="frmParam" class="card shadow-sm">
+        <input type="hidden" id="id_parametro" name="id_parametro">
+        <div class="card-header">
+          <div class="form-title">
+            <i class="bi bi-pencil-square me-2"></i>
+            <span>Editar registro</span>
+          </div>
+        </div>
+
+        <div class="card-body row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Estanque <span class="req">*</span></label>
+            <select required id="selEstanque" name="id_estanque" class="form-select"></select>
+            <div class="form-hint">Selecciona el estanque correspondiente.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Fecha y hora <span class="req">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+              <input required type="datetime-local" id="fecha" name="fecha" class="form-control">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Temperatura (°C)</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-thermometer-half"></i></span>
+              <input type="number" step="0.01" id="temperatura" name="temperatura" class="form-control">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">pH</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-bezier2"></i></span>
+              <input type="number" step="0.01" id="ph" name="ph" class="form-control">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Oxígeno O₂ (mg/L)</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-wind"></i></span>
+              <input type="number" step="0.01" id="oxigeno" name="oxigeno" class="form-control">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Amonio NH₃ (mg/L)</label>
+            <input type="number" step="0.001" id="amonio" name="amonio" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Nitritos NO₂ (mg/L)</label>
+            <input type="number" step="0.001" id="nitritos" name="nitritos" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Turbidez (NTU)</label>
+            <input type="number" step="0.01" id="turbidez" name="turbidez" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Tipo</label>
+            <input type="text" id="tipo" name="tipo" maxlength="50" class="form-control" placeholder="Ej: rutina, alerta, semanal">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Observación</label>
+            <input id="observacion" name="observacion" class="form-control" maxlength="255" placeholder="Notas del muestreo…">
+          </div>
+
+          <div class="col-12 d-flex align-items-center gap-2">
+            <div id="msg" class="alert d-none flex-grow-1 mb-0"></div>
+            <button class="btn btn-primary">
+              <i class="bi bi-check2-circle me-2"></i>
+              Guardar cambios
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </main>
 
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JS existente (NO modificado) -->
   <script type="module" src="../JS/parametro_agua_editar.js"></script>
+
   <script>
     const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
     document.getElementById("btnLogout")?.addEventListener("click", async () => {
       try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch {}
       sessionStorage.removeItem("user"); location.href = "index.html";
+    });
+
+    // Toggle sidebar (móvil)
+    document.getElementById("sidebarToggle")?.addEventListener("click", () => {
+      document.body.classList.toggle("sidebar-open");
+    });
+
+    // Cerrar sidebar al hacer clic fuera (móvil)
+    document.addEventListener("click", (e) => {
+      if (window.innerWidth < 992) {
+        const sidebar = document.querySelector(".sidebar");
+        const toggle = document.getElementById("sidebarToggle");
+        if (!sidebar?.contains(e.target) && !toggle?.contains(e.target)) {
+          document.body.classList.remove("sidebar-open");
+        }
+      }
     });
   </script>
 </body>

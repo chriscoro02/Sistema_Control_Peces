@@ -5,78 +5,160 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Nuevo Registro de Venta</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
   <link rel="stylesheet" href="../CSS/style_venta_nueva.css">
 </head>
 <body>
+  <!-- Sidebar -->
   <aside class="sidebar">
-    <h5>Administrador</h5>
-    <nav>
-      <a href="dashboard.html">Panel principal</a>
-      <a href="lote.html">Lote</a>
-      <a href="cosechas.html">Cosecha</a>
-      <a href="alimentacion.html">Registro de alimentación</a>
-      <a href="parametro_agua.html">Parámetro de agua</a>
-      <a href="ventas.html" class="active">Registro de venta</a>
-      <hr>
-      <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
-    </nav>
-  </aside>
-
-  <main class="content">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="m-0">Crear Registro de Venta</h3>
-      <div class="d-flex gap-2">
-        <span id="usuarioBox" class="userchip">Cargando…</span>
-        <a href="ventas.html" class="btn btn-outline-secondary">← Volver</a>
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="bi bi-water"></i>
+        <h4>Lagos Andinos</h4>
+      </div>
+      <div class="role-badge">
+        <i class="bi bi-person-gear"></i>
+        <span>Administrador</span>
       </div>
     </div>
 
-    <form id="frmVenta" class="card shadow-sm">
-      <div class="card-body row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Cosecha *</label>
-          <select required name="id_cosecha" id="selCosecha" class="form-select"></select>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Destino de Venta *</label>
-          <select required name="id_destino" id="selDestino" class="form-select"></select>
-        </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="bi bi-speedometer2"></i><span>Panel principal</span>
+      </a>
+      <a href="lote.html" class="nav-item">
+        <i class="bi bi-collection"></i><span>Lote</span>
+      </a>
+      <a href="cosechas.html" class="nav-item">
+        <i class="bi bi-basket"></i><span>Cosecha</span>
+      </a>
+      <a href="alimentacion.html" class="nav-item">
+        <i class="bi bi-clipboard-data"></i><span>Registro de alimentación</span>
+      </a>
+      <a href="parametro_agua.html" class="nav-item">
+        <i class="bi bi-droplet"></i><span>Parámetro de agua</span>
+      </a>
+      <a href="ventas.html" class="nav-item active">
+        <i class="bi bi-cart-check"></i><span>Registro de venta</span>
+      </a>
 
-        <div class="col-md-6">
-          <label class="form-label">Fecha de venta *</label>
-          <input required type="datetime-local" name="fecha_venta" class="form-control" />
-        </div>
+      <div class="nav-divider"></div>
 
-        <div class="col-md-6">
-          <label class="form-label">Presentación (opcional)</label>
-          <input name="presentacion" class="form-control" maxlength="60" placeholder="Ej: Fresco, Entero / Filete / Vivo" />
-        </div>
+      <button id="btnLogout" class="nav-item logout-btn">
+        <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+      </button>
+    </nav>
+  </aside>
 
-        <div class="col-md-6">
-          <label class="form-label">Temperatura de transporte (°C) (opcional)</label>
-          <input type="number" step="0.01" name="temperatura_transporte" class="form-control" placeholder="Ej: 4.50" />
-        </div>
-
-        <div class="col-12">
-          <label class="form-label">Observaciones (opcional)</label>
-          <textarea name="observacion" class="form-control" maxlength="255" rows="3"></textarea>
-        </div>
-
-        <div class="col-12">
-          <div id="msg" class="alert d-none"></div>
-          <button class="btn btn-primary">Guardar Venta</button>
+  <!-- Main -->
+  <main class="content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle d-lg-none" id="sidebarToggle">
+          <i class="bi bi-list"></i>
+        </button>
+        <h3 class="page-title">Crear Registro de Venta</h3>
+      </div>
+      <div class="topbar-right">
+        <a href="ventas.html" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </a>
+        <div id="usuarioBox" class="user-chip">
+          <i class="bi bi-person-circle"></i>
+          <span>Cargando…</span>
         </div>
       </div>
-    </form>
+    </div>
+
+    <!-- Body -->
+    <div class="content-body">
+      <form id="frmVenta" class="card shadow-sm">
+        <div class="card-header">
+          <div class="form-title">
+            <i class="bi bi-receipt-cutoff me-2"></i>
+            <span>Datos de la venta</span>
+          </div>
+        </div>
+
+        <div class="card-body row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Cosecha <span class="req">*</span></label>
+            <select required name="id_cosecha" id="selCosecha" class="form-select"></select>
+            <div class="form-hint">Selecciona la cosecha asociada a la venta.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Destino de Venta <span class="req">*</span></label>
+            <select required name="id_destino" id="selDestino" class="form-select"></select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Fecha de venta <span class="req">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+              <input required type="datetime-local" name="fecha_venta" class="form-control" />
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Presentación (opcional)</label>
+            <input name="presentacion" class="form-control" maxlength="60" placeholder="Ej: Fresco, Entero / Filete / Vivo" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Temperatura de transporte (°C) (opcional)</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-thermometer-snow"></i></span>
+              <input type="number" step="0.01" name="temperatura_transporte" class="form-control" placeholder="Ej: 4.50" />
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Observaciones (opcional)</label>
+            <textarea name="observacion" class="form-control" maxlength="255" rows="3"
+              placeholder="Notas relevantes de la entrega, transporte, calidad…"></textarea>
+          </div>
+
+          <div class="col-12 d-flex align-items-center gap-2">
+            <div id="msg" class="alert d-none flex-grow-1 mb-0"></div>
+            <button class="btn btn-primary">
+              <i class="bi bi-check2-circle me-2"></i>
+              Guardar Venta
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </main>
 
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JS existente (NO modificado) -->
   <script type="module" src="../JS/venta_nueva.js"></script>
+
   <script>
     const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
     document.getElementById("btnLogout")?.addEventListener("click", async () => {
       try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch {}
-      sessionStorage.removeItem("user");
-      location.href = "index.html";
+      sessionStorage.removeItem("user"); location.href = "index.html";
+    });
+
+    // Toggle sidebar (móvil)
+    document.getElementById("sidebarToggle")?.addEventListener("click", () => {
+      document.body.classList.toggle("sidebar-open");
+    });
+
+    // Cerrar sidebar al hacer clic fuera (móvil)
+    document.addEventListener("click", (e) => {
+      if (window.innerWidth < 992) {
+        const sidebar = document.querySelector(".sidebar");
+        const toggle = document.getElementById("sidebarToggle");
+        if (!sidebar?.contains(e.target) && !toggle?.contains(e.target)) {
+          document.body.classList.remove("sidebar-open");
+        }
+      }
     });
   </script>
 </body>

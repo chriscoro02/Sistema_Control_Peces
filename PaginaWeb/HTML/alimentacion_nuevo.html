@@ -1,105 +1,182 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Nuevo Registro de Alimentación</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/style_alimentacion_nuevos.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nuevo Registro de Alimentación</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../CSS/style_alimentacion_nuevos.css">
 </head>
 <body>
-    <aside class="sidebar">
-        <h5>Administrador</h5>
-        <nav>
-            <a href="dashboard.html">Panel principal</a>
-            <a href="lote.html">Lote</a>
-            <a href="cosechas.html">Cosecha</a>
-            <a href="alimentacion.html" class="active">Registro de alimentación</a>
-            <a href="parametro_agua.html">Parámetro de agua</a>
-            <a href="ventas.html">Registro de venta</a>
-            <hr>
-            <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
-        </nav>
-    </aside>
-    <main class="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="m-0">Crear Registro de Alimentación</h3>
-            <div class="d-flex gap-2">
-                <span id="usuarioBox" class="userchip">Cargando…</span>
-                <a href="alimentacion.html" class="btn btn-outline-secondary">← Volver</a>
-            </div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="bi bi-water"></i>
+        <h4>Lagos Andinos</h4>
+      </div>
+      <div class="role-badge">
+        <i class="bi bi-person-gear"></i>
+        <span>Administrador</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="bi bi-speedometer2"></i><span>Panel principal</span>
+      </a>
+      <a href="lote.html" class="nav-item">
+        <i class="bi bi-collection"></i><span>Lote</span>
+      </a>
+      <a href="cosechas.html" class="nav-item">
+        <i class="bi bi-basket"></i><span>Cosecha</span>
+      </a>
+      <a href="alimentacion.html" class="nav-item active">
+        <i class="bi bi-clipboard-data"></i><span>Registro de alimentación</span>
+      </a>
+      <a href="parametro_agua.html" class="nav-item">
+        <i class="bi bi-droplet"></i><span>Parámetro de agua</span>
+      </a>
+      <a href="ventas.html" class="nav-item">
+        <i class="bi bi-cart-check"></i><span>Registro de venta</span>
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <button id="btnLogout" class="nav-item logout-btn">
+        <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle d-lg-none" id="sidebarToggle">
+          <i class="bi bi-list"></i>
+        </button>
+        <h3 class="page-title">Nuevo Registro de Alimentación</h3>
+      </div>
+      <div class="topbar-right">
+        <a href="alimentacion.html" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </a>
+        <div id="usuarioBox" class="user-chip">
+          <i class="bi bi-person-circle"></i>
+          <span>Cargando…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="content-body">
+      <form id="frmAlimentacion" class="card shadow-sm">
+        <div class="card-header">
+          <div class="form-title">
+            <i class="bi bi-clipboard-plus me-2"></i>
+            <span>Datos del registro</span>
+          </div>
         </div>
 
-        <form id="frmAlimentacion" class="card shadow-sm">
-            <div class="card-body row g-3">
+        <div class="card-body row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Lote <span class="req">*</span></label>
+            <select required name="id_lote" id="selLote" class="form-select">
+              <option value="">Cargando lotes...</option>
+            </select>
+            <div class="form-hint">Selecciona el lote que será alimentado.</div>
+          </div>
 
-                <div class="col-md-6">
-                    <label class="form-label">Lote *</label>
-                    <select required name="id_lote" id="selLote" class="form-select">
-                        <option value="">Cargando lotes...</option>
-                    </select>
-                </div>
+          <div class="col-md-6">
+            <label class="form-label">Tipo de Alimento <span class="req">*</span></label>
+            <select required name="id_tipo_alimento" id="selTipoAlimento" class="form-select">
+              <option value="">Cargando tipos...</option>
+            </select>
+            <div class="form-hint">Se filtra desde el inventario disponible.</div>
+          </div>
 
-                <div class="col-md-6">
-                    <label class="form-label">Tipo de Alimento *</label>
-                    <select required name="id_tipo_alimento" id="selTipoAlimento" class="form-select">
-                        <option value="">Cargando tipos...</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Fecha y Hora *</label>
-                    <input required type="datetime-local" name="fecha" class="form-control" />
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Cantidad (kg) *</label>
-                    <input required type="number" min="0.01" step="0.01" name="cantidad" class="form-control"
-                        placeholder="Ej: 2.5" />
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Frecuencia (opcional)</label>
-                    <input name="frecuencia" class="form-control" maxlength="40"
-                        placeholder="Ej: Mañana, Tarde, Mediodía" />
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Comportamiento (opcional)</label>
-                    <select name="comportamiento" class="form-select">
-                        <option value="">-- Seleccionar --</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Activo">Activo</option>
-                        <option value="Pasivo">Pasivo</option>
-                        <option value="Agresivo">Agresivo</option>
-                    </select>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label">Observaciones (opcional)</label>
-                    <textarea name="observacion" class="form-control" maxlength="255" rows="3"></textarea>
-                </div>
-
-                <div class="col-12">
-                    <div id="msg" class="alert d-none"></div>
-                    <button class="btn btn-primary">Guardar Registro</button>
-                </div>
-
+          <div class="col-md-6">
+            <label class="form-label">Fecha y Hora <span class="req">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+              <input required type="datetime-local" name="fecha" class="form-control" />
             </div>
-        </form>
-    </main>
+          </div>
 
-    <script type="module" src="../JS/alimentacion_nuevo.js"></script>
+          <div class="col-md-6">
+            <label class="form-label">Cantidad (kg) <span class="req">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-weight"></i></span>
+              <input required type="number" min="0.01" step="0.01" name="cantidad" class="form-control" placeholder="Ej: 2.5" />
+            </div>
+          </div>
 
-    <script>
-        const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
-        document.getElementById("btnLogout")?.addEventListener("click", async () => {
-            try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch { }
-            sessionStorage.removeItem("user");
-            location.href = "index.html";
-        });
-    </script>
+          <div class="col-md-6">
+            <label class="form-label">Frecuencia (opcional)</label>
+            <input name="frecuencia" class="form-control" maxlength="40" placeholder="Ej: Mañana, Tarde, Mediodía" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Comportamiento (opcional)</label>
+            <select name="comportamiento" class="form-select">
+              <option value="">-- Seleccionar --</option>
+              <option value="Normal">Normal</option>
+              <option value="Activo">Activo</option>
+              <option value="Pasivo">Pasivo</option>
+              <option value="Agresivo">Agresivo</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Observaciones (opcional)</label>
+            <textarea name="observacion" class="form-control" maxlength="255" rows="3"
+              placeholder="Notas relevantes durante la alimentación…"></textarea>
+          </div>
+
+          <div class="col-12 d-flex align-items-center gap-2">
+            <div id="msg" class="alert d-none flex-grow-1 mb-0"></div>
+            <button class="btn btn-primary">
+              <i class="bi bi-check2-circle me-2"></i>
+              Guardar Registro
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Funcionalidad existente (NO MODIFICADA) -->
+  <script type="module" src="../JS/alimentacion_nuevo.js"></script>
+
+  <script>
+    const URL_LOGOUT = "https://sienna-curlew-728554.hostingersite.com/Sistema_Peces/PHP/logout.php";
+    document.getElementById("btnLogout")?.addEventListener("click", async () => {
+      try { await fetch(URL_LOGOUT, { credentials: "include" }); } catch { }
+      sessionStorage.removeItem("user");
+      location.href = "index.html";
+    });
+
+    // Toggle sidebar en móviles
+    document.getElementById("sidebarToggle")?.addEventListener("click", () => {
+      document.body.classList.toggle("sidebar-open");
+    });
+
+    // Cerrar sidebar al hacer clic fuera (móvil)
+    document.addEventListener("click", (e) => {
+      if (window.innerWidth < 992) {
+        const sidebar = document.querySelector(".sidebar");
+        const toggle = document.getElementById("sidebarToggle");
+        if (!sidebar?.contains(e.target) && !toggle?.contains(e.target)) {
+          document.body.classList.remove("sidebar-open");
+        }
+      }
+    });
+  </script>
 </body>
-
 </html>
